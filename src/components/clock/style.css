@@ -1,0 +1,23 @@
+section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  font-size: 5em;
+}
+
+button {
+  padding: 2px 40px;
+}
+
+.lucide {
+  width: 70px;
+  height: 70px;
+}

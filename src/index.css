@@ -1,0 +1,7 @@
+:root {
+  width: screen;
+  height: screen;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
