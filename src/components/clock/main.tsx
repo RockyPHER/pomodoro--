@@ -1,8 +1,15 @@
 import "./style.css";
-import { Play } from "lucide-react";
+import { Pause, Play } from "lucide-react";
 import { useState } from "react";
+import CreateTask from "../task/CreateTask";
+import { ITask } from "../models/task";
 
 export default function Clock() {
+  // variables
+  const [currentTime, setCurrentTime] = useState(0);
+  const [warn, setWarn] = useState("");
+  const cycle: number[] = [];
+
   const Timer = {
     time_start: 0,
     time_current: 0,
@@ -13,83 +20,64 @@ export default function Clock() {
     completed: false,
   };
 
-  const [currentTime, setCurrentTime] = useState(0);
+  const tasks: ITask[] = [];
 
-  const cycle: number[] = [];
-
-  function setNextCycle(countdown: number) {
-    console.log(cycle, countdown);
-    cycle.push(countdown);
-    console.log(cycle, countdown);
-    return;
+  // Task
+  function setTaskValues(task: ITask) {
+    tasks.push(task);
+  }
+  function getNextTask() {
+    const currentTask = tasks.shift();
+    return currentTask ? currentTask.time : 0;
   }
 
-  function getCountdown() {
-    if (cycle.length <= 0) {
-      throw new Error("No cycles found");
-    }
-    return cycle[0];
-  }
-
-  function getNextCountdown() {
-    if (cycle.length <= 0) {
-      throw new Error("No cycles found");
-    }
-    cycle.shift();
-    return cycle[0];
-  }
-
-  function setTimes(countdown: number) {
-    Timer.time_start = countdown;
+  // Handle timer props
+  function setTimes(cycleTime: number) {
+    Timer.time_start = cycleTime;
     Timer.time_current = Timer.time_start;
     Timer.time_passed = Timer.time_start - Timer.time_current;
   }
-
-  function changeTime() {
+  function updateTime() {
     Timer.time_current--;
     Timer.time_passed = Timer.time_start - Timer.time_current;
     setCurrentTime(Timer.time_current);
   }
 
+  // Timer state controllers
   function setResetTimer() {
     setTimes(0);
     Timer.start = false;
     Timer.stop = true;
   }
-
   function setStartTimer() {
-    setTimes(getCountdown());
+    setTimes(getNextTask());
     Timer.start = true;
     Timer.stop = false;
   }
-
   function setStopTimer() {
-    setTimes(getCountdown());
+    setTimes(getNextTask());
     Timer.start = false;
     Timer.stop = true;
   }
-
   function setSkipTimer() {
-    setTimes(getNextCountdown());
+    setTimes(getNextTask());
     Timer.start = false;
     Timer.stop = false;
   }
-
   function setResumeTimer() {
     Timer.start = true;
   }
-
   function setPauseTimer() {
     Timer.start = false;
   }
-
   function setCompleteTimer() {
-    setTimes(getNextCountdown());
+    setTimes(getNextTask());
     Timer.start = false;
     Timer.stop = true;
     Timer.completed = true;
   }
 
+  // Timer core
   function startTimer() {
     console.log("Timer started", Timer);
     const times = setInterval(timeCycle, 1000);
@@ -106,10 +94,11 @@ export default function Clock() {
         console.log("Timer completed", Timer);
         return;
       }
-      changeTime();
+      updateTime();
     }
   }
 
+  // Timer handlers
   function handleStartTimer() {
     console.log("start");
     if (cycle.length <= 0) {
@@ -132,7 +121,6 @@ export default function Clock() {
     }
     setPauseTimer();
   }
-
   function handleSkipTimer() {
     if (cycle.length >= 0) {
       setResetTimer();
@@ -140,7 +128,6 @@ export default function Clock() {
     }
     setSkipTimer();
   }
-
   function handleStopTimer() {
     if (cycle.length >= 0) {
       setResetTimer();
@@ -148,35 +135,14 @@ export default function Clock() {
     }
     setStopTimer();
   }
-  const [warn, setWarn] = useState("");
-
-  function handlePlay() {
-    if (cycle.length <= 0) {
-      setWarn("Please add at least one cycle.");
-      setTimeout(() => {
-        setWarn("");
-      }, 2000);
-      return;
-    }
-    handleStartTimer();
-  }
-
-  function handleAddCycle() {
-    const value = (
-      document.getElementById("cycle") as HTMLInputElement & { value: number }
-    ).value;
-    value && setNextCycle(parseInt(value));
-  }
 
   return (
     <section>
       <span>{currentTime}</span>
-      <button onClick={() => handlePlay()}>
-        <Play />
+      <button onClick={() => handleStartTimer()}>
+        {Timer.start ? <Pause /> : <Play />}
       </button>
-      <button onClick={() => handleAddCycle()}>SetCountdown</button>
-      <input id="cycle" min={0} type="number"></input>
-      {warn && <p>{warn}</p>}
+      <CreateTask setTaskValues={setTaskValues} />
     </section>
   );
 }
