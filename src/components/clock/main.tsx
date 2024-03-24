@@ -8,7 +8,6 @@ export default function Clock() {
   // variables
   const [currentTime, setCurrentTime] = useState(0);
   const [warn, setWarn] = useState("");
-  const cycle: number[] = [];
 
   const Timer = {
     time_start: 0,
@@ -101,7 +100,7 @@ export default function Clock() {
   // Timer handlers
   function handleStartTimer() {
     console.log("start");
-    if (cycle.length <= 0) {
+    if (tasks.length <= 0) {
       console.log("invalid cycle");
       setResetTimer();
       return;
@@ -122,14 +121,14 @@ export default function Clock() {
     setPauseTimer();
   }
   function handleSkipTimer() {
-    if (cycle.length >= 0) {
+    if (tasks.length >= 0) {
       setResetTimer();
       return;
     }
     setSkipTimer();
   }
   function handleStopTimer() {
-    if (cycle.length >= 0) {
+    if (tasks.length >= 0) {
       setResetTimer();
       return;
     }
