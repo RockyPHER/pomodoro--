@@ -1,6 +1,13 @@
+@import "./config.css";
+
 * {
   box-sizing: border-box;
+  font-family: "Ubuntu", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  color: var(--text);
 }
+
 :root {
   width: screen;
   height: screen;

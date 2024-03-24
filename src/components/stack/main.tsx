@@ -5,7 +5,7 @@ export default function Stack() {
   return (
     <section className="stack-container">
       <div className="stack-heading">
-        <h1>Title</h1>
+        <h1 className="stack-title">Title</h1>
       </div>
       <div className="stack-body">
         <button className="button-add-task">

@@ -1,3 +1,5 @@
+@import "../../styles/config.css";
+
 section {
   display: flex;
   flex-direction: column;
