@@ -1,6 +1,13 @@
 @import "./config.css";
 
+:root {
+  background-image: url(https://wallroom.io/img/2560x1440/bg-426b328.jpg);
+  background-size: cover;
+}
+
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
   font-family: "Ubuntu", sans-serif;
   font-optical-sizing: auto;
@@ -8,14 +15,10 @@
   color: var(--text);
 }
 
-:root {
-  width: screen;
-  height: screen;
-}
-
 main {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
+  padding: 20px;
   display: flex;
   justify-content: start;
   align-items: center;
