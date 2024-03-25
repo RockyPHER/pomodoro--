@@ -10,7 +10,7 @@
   overflow: hidden;
 }
 
-.stack-container .stack-heading {
+.stack-heading {
   width: 100%;
   height: 60px;
   padding: 5px 0px;
@@ -20,19 +20,19 @@
   background-color: var(--background-1);
 }
 
-.stack-container .stack-heading .stack-title {
+.stack-title {
   font-size: 2em;
   color: var(--text);
 }
 
-.stack-container .stack-body {
+.stack-body {
   width: 100%;
   height: 100%;
   padding: 10px;
   background-color: var(--surface-2);
 }
 
-.stack-container .stack-body .button-add-task {
+.button-add-task {
   width: 100%;
   height: 40px;
   display: flex;
@@ -44,9 +44,9 @@
   border-radius: 5px;
   cursor: pointer;
 }
-.stack-container .stack-body .button-add-task:hover {
+.button-add-task:hover {
   background-color: var(--surface-1);
 }
-.stack-container .stack-body .button-add-task:active {
+.button-add-task:active {
   background-color: var(--surface-2);
 }

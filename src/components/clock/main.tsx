@@ -3,6 +3,7 @@ import { Pause, Play } from "lucide-react";
 import { useState } from "react";
 import CreateTask from "../task/CreateTask";
 import { ITask } from "../models/task";
+import ClockButtons from "./buttons/main";
 
 export default function Clock() {
   // variables
@@ -138,10 +139,7 @@ export default function Clock() {
   return (
     <section>
       <span>{currentTime}</span>
-      <button onClick={() => handleStartTimer()}>
-        {Timer.start ? <Pause /> : <Play />}
-      </button>
-      <CreateTask setTaskValues={setTaskValues} />
+      <ClockButtons />
     </section>
   );
 }
