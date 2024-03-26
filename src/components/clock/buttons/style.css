@@ -1,10 +1,26 @@
+@import "../../../styles/config.css";
+
 .clock-buttons-container {
   display: flex;
+  gap: 5px;
+}
+.clock-buttons-container > * {
+  cursor: pointer;
+  background-color: transparent;
+  border: 2px solid transparent;
+  border-radius: 8px;
+}
+.clock-buttons-container > *:hover {
+  border: 2px solid var(--background);
+}
+.clock-buttons-container > *:active {
+  background-color: var(--background);
 }
 
-.clock-buttons-skip {
-}
-.clock-buttons-play {
-}
-.clock-buttons-stop {
+.lucide {
+  /* Change this! */
+  color: #ffadff;
+  width: 56px;
+  height: 56px;
+  stroke-width: 1px;
 }

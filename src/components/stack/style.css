@@ -50,3 +50,8 @@
 .button-add-task:active {
   background-color: var(--surface-2);
 }
+
+.button-add-task-icon {
+  width: 2em;
+  height: 2em;
+}

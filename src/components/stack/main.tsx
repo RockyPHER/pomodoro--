@@ -1,7 +1,7 @@
 import { Plus } from "lucide-react";
 import "./style.css";
 
-export default function Stack() {
+function Stack() {
   return (
     <section className="stack-container">
       <div className="stack-heading">
@@ -9,10 +9,12 @@ export default function Stack() {
       </div>
       <div className="stack-body">
         <button className="button-add-task">
-          <Plus />
+          <Plus className="button-add-task-icon" />
           Add new task
         </button>
       </div>
     </section>
   );
 }
+
+export default Stack;
