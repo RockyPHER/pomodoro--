@@ -7,14 +7,14 @@ export default function ClockButtons() {
 
   return (
     <div className="clock-buttons-container">
-      <button className="clock-buttons skip">
-        <SkipForward className="icon" />
+      <button className="clock-buttons-skip">
+        <SkipForward />
       </button>
-      <button className="clock-buttons play-pause">
-        {isPlay ? <Pause className="icon" /> : <Play className="icon" />}
+      <button className="clock-buttons-play">
+        {isPlay ? <Pause /> : <Play />}
       </button>
-      <button className="clock-buttons stop">
-        <Square className="icon" />
+      <button className="clock-buttons-stop">
+        <Square />
       </button>
     </div>
   );
