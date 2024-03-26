@@ -1,13 +1,12 @@
 import "./style.css";
-import { Pause, Play } from "lucide-react";
 import { useState } from "react";
-import CreateTask from "../task/CreateTask";
-import { ITask } from "../models/task";
+import { ITask } from "../../models/task";
 import ClockButtons from "./buttons/main";
+import { formatTime } from "../../scripts/timeFormat";
 
 export default function Clock() {
   // variables
-  const [currentTime, setCurrentTime] = useState(0);
+  const [currentTime, setCurrentTime] = useState(formatTime(0));
   const [warn, setWarn] = useState("");
 
   const Timer = {
@@ -40,7 +39,7 @@ export default function Clock() {
   function updateTime() {
     Timer.time_current--;
     Timer.time_passed = Timer.time_start - Timer.time_current;
-    setCurrentTime(Timer.time_current);
+    setCurrentTime(formatTime(Timer.time_current));
   }
 
   // Timer state controllers
@@ -137,8 +136,10 @@ export default function Clock() {
   }
 
   return (
-    <section>
-      <span>{currentTime}</span>
+    <section className="clock-timer-container">
+      <span className="clock-time text">
+        {currentTime[0]}:{currentTime[1]}
+      </span>
       <ClockButtons />
     </section>
   );

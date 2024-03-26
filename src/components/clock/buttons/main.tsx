@@ -6,14 +6,14 @@ export default function ClockButtons() {
   const [isPlay, setIsPlay] = useState(false);
 
   return (
-    <div className="clock-buttons-container">
-      <button className="clock-buttons-skip">
+    <div className="clock-button-container">
+      <button className="clock-button skip">
         <SkipForward />
       </button>
-      <button className="clock-buttons-play">
+      <button className={`clock-button ${isPlay ? "pause" : "play"}`}>
         {isPlay ? <Pause /> : <Play />}
       </button>
-      <button className="clock-buttons-stop">
+      <button className="clock-button stop">
         <Square />
       </button>
     </div>

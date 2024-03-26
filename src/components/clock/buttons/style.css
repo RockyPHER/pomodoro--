@@ -1,10 +1,15 @@
-.clock-buttons-container {
+.clock-button-container {
   display: flex;
+  gap: 5px;
 }
 
-.clock-buttons-skip {
+.clock-button {
+  cursor: pointer;
+  background-color: transparent;
 }
-.clock-buttons-play {
+.clock-button:hover {
+  background-color: var(--background);
 }
-.clock-buttons-stop {
+.clock-button:active {
+  background-color: var(--background-2);
 }
