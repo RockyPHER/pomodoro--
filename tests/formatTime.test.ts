@@ -17,3 +17,9 @@ test("throws error if input is negative", async () => {
     const input = -100;
     expect(() => formatTime(input)).toThrowError("invalid input. time is negative!")
 })
+
+test("if time falsy returns 0", async () => {
+    const input = undefined;
+    const expectedResult = ["00", "00"]
+    expect(formatTime(input)).toEqual(expectedResult)
+})

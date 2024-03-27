@@ -1,5 +1,8 @@
 
-export function formatTime(time: number) {
+export function formatTime(time: number | undefined) {
+    if (!time) {
+        time = 0;
+    }
     if (time < 0) {
         throw new Error("invalid input. time is negative!")
     }

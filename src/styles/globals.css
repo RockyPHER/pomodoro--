@@ -11,10 +11,6 @@
   box-sizing: border-box;
 }
 
-.lucide {
-  color: var(--background);
-}
-
 .text {
   font-family: "Ubuntu", sans-serif;
   font-optical-sizing: auto;
