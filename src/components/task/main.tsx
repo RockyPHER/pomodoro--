@@ -6,9 +6,10 @@ import { ITask } from "../../models/task";
 
 interface TaskProps {
   data: ITask;
+  deleteTask: (id: number) => void;
 }
 
-export default function Task({ data }: TaskProps) {
+export default function Task({ data, deleteTask }: TaskProps) {
   const [editDuration, setEditDuration] = useState(false);
   const [editTitle, setEditTitle] = useState(true);
   const [openTask, setOpenTask] = useState(false);
@@ -34,7 +35,7 @@ export default function Task({ data }: TaskProps) {
             value={title}
           ></input>
         ) : (
-          <span onSelect={() => setEditTitle(true)} className="task-title text">
+          <span onClick={() => setEditTitle(true)} className="task-title text">
             {title}
           </span>
         )}
@@ -55,7 +56,10 @@ export default function Task({ data }: TaskProps) {
               {formatedDuration[0]}:{formatedDuration[1]}
             </span>
           )}
-          <button className="task-button-close">
+          <button
+            className="task-button-close"
+            onClick={() => deleteTask(data.id)}
+          >
             <X className="x" />
           </button>
         </div>
