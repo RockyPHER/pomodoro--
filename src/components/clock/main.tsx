@@ -27,7 +27,7 @@ export default function Clock() {
   }
   function getNextTask() {
     const currentTask = tasks.shift();
-    return currentTask ? currentTask.time : 0;
+    return currentTask ? currentTask.duration : 0;
   }
 
   // Handle timer props
@@ -137,9 +137,11 @@ export default function Clock() {
 
   return (
     <section className="clock-timer-container">
-      <span className="clock-time text">
-        {currentTime[0]}:{currentTime[1]}
-      </span>
+      <div className="clock-time-container">
+        <span className="clock-time-text text">
+          {currentTime[0]}:{currentTime[1]}
+        </span>
+      </div>
       <ClockButtons />
     </section>
   );

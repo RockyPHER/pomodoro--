@@ -1,5 +1,5 @@
 import "./style.css";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { formatTime } from "../../scripts/timeFormat";
 import { X } from "lucide-react";
 import { ITask } from "../../models/task";
@@ -24,38 +24,50 @@ export default function Task({ data, deleteTask }: TaskProps) {
     setFormatedDuration(formatTime(duration));
   }, [duration]);
 
+  function handleTimeInput(e: ChangeEvent<HTMLInputElement>) {
+    setDuration(parseInt(e.target.value));
+  }
+
   return (
     <div className="task-container">
       <div className="task-heading">
-        {editTitle ? (
-          <input
-            className="task-title-input"
-            onBlur={() => setEditTitle(false)}
-            onChange={(e) => setTitle(e.target.value)}
-            value={title}
-          ></input>
-        ) : (
-          <span onClick={() => setEditTitle(true)} className="task-title text">
-            {title}
-          </span>
-        )}
-        <div className="task-heading-right">
-          {editDuration ? (
+        <div className="task-heading-left">
+          {editTitle ? (
             <input
-              className="task-duration-input"
-              onBlur={() => setEditDuration(false)}
-              onChange={(e) => setDuration(parseInt(e.target.value))}
-              value={duration}
-              type="number"
+              className="task-title-input"
+              autoFocus
+              onBlur={() => setEditTitle(false)}
+              onChange={(e) => setTitle(e.target.value)}
+              value={title}
             ></input>
           ) : (
             <span
-              onSelect={() => setEditDuration(true)}
-              className="task-duration text"
+              className="task-title-text text"
+              onClick={() => setEditTitle(true)}
+            >
+              {title}
+            </span>
+          )}
+          {editDuration ? (
+            <input
+              className="task-duration-input"
+              autoFocus
+              onBlur={() => setEditDuration(false)}
+              onChange={(e) => handleTimeInput(e)}
+              value={duration}
+              type="number"
+              min={0}
+            ></input>
+          ) : (
+            <span
+              onClick={() => setEditDuration(true)}
+              className="task-duration-text text"
             >
               {formatedDuration[0]}:{formatedDuration[1]}
             </span>
           )}
+        </div>
+        <div className="task-heading-right">
           <button
             className="task-button-close"
             onClick={() => deleteTask(data.id)}
