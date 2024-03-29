@@ -2,18 +2,64 @@
 
 .clock-top-buttons-container {
   display: flex;
-  gap: 5px;
+  gap: 2em;
 }
 
 .clock-button {
+  width: auto;
+  height: min-content;
+  padding: 0.4em;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
   background-color: transparent;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }
 .clock-button:hover {
-  background-color: var(--background);
 }
 .clock-button:active {
+}
+
+.clock-button-main {
+  padding: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 0.18em solid transparent;
+  border-radius: 9999px;
+  background-color: var(--background);
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.clock-button-main:hover {
+  transform: scale(1.1);
+  background-color: var(--background-1);
+}
+.clock-button-main:active {
+  transform: scale(1);
   background-color: var(--background-2);
+}
+
+.clock-button-main-icon {
+  color: var(--text);
+}
+
+.clock-button-icon {
+  color: var(--background);
+}
+.clock-button-icon:hover {
+  color: var(--primary);
+  fill: var(--primary);
+}
+.clock-button-icon:active {
+  color: var(--primary-1);
+  fill: var(--primary-1);
 }
 
 .clock-load-container {
@@ -33,6 +79,7 @@
 .load-task-icon {
   width: 2em;
   height: 2em;
+  color: var(--background);
 }
 
 .load-task-text {

@@ -11,13 +11,17 @@ export default function ClockButtons() {
     <div className="clock-buttons-container">
       <div className="clock-top-buttons-container">
         <button className="clock-button skip">
-          <SkipForward />
+          <SkipForward className="clock-button-icon" />
         </button>
-        <button className={`clock-button ${isPlay ? "pause" : "play"}`}>
-          {isPlay ? <Pause /> : <Play />}
+        <button className={`clock-button-main ${isPlay ? "pause" : "play"}`}>
+          {isPlay ? (
+            <Pause className="clock-button-main-icon" />
+          ) : (
+            <Play className="clock-button-main-icon" />
+          )}
         </button>
         <button className="clock-button stop">
-          <Square />
+          <Square className="clock-button-icon" />
         </button>
       </div>
       {!hasTasks ? (
