@@ -1,4 +1,11 @@
-import { Pause, Play, SaveAll, SkipForward, Square } from "lucide-react";
+import {
+  ListEndIcon,
+  Pause,
+  Play,
+  SaveAll,
+  SkipForward,
+  Square,
+} from "lucide-react";
 import { useState } from "react";
 import "./style.css";
 import OngoingTask from "../ongoing-task/main";
@@ -27,7 +34,8 @@ export default function ClockButtons() {
       {!hasTasks ? (
         <div className="clock-load-container">
           <button className="load-task-button">
-            <SaveAll className="load-task-icon" />
+            <ListEndIcon className="load-task-icon" />
+            <span className="load-task-text text">Load tasks</span>
           </button>
         </div>
       ) : (

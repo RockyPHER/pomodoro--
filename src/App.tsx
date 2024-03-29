@@ -1,5 +1,5 @@
 import Clock from "./components/clock/main";
-import Stack from "./components/stack/main";
+import Stack from "./components/stack/back-stack";
 
 export default function App() {
   return (

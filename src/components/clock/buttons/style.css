@@ -1,5 +1,12 @@
 @import "../../../styles/globals.css";
 
+.clock-buttons-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  justify-content: space-between;
+}
+
 .clock-top-buttons-container {
   display: flex;
   gap: 2em;
@@ -26,10 +33,10 @@
 
 .clock-button-main {
   padding: 1em;
+  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
   border: 0.18em solid transparent;
   border-radius: 9999px;
   background-color: var(--background);
@@ -69,19 +76,36 @@
 }
 
 .load-task-button {
+  padding: 0.3em 0.8em;
+  cursor: pointer;
   display: flex;
-  flex-direction: column;
+  gap: 0.8em;
   justify-content: center;
   align-items: center;
-  background-color: transparent;
+  border: none;
+  border-radius: 0.5em;
+  background-color: var(--background);
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.load-task-button:hover {
+  transform: scale(1.1);
+  background-color: var(--background-1);
+}
+.load-task-button:active {
+  transform: scale(1);
+  background-color: var(--background-2);
 }
 
 .load-task-icon {
   width: 2em;
   height: 2em;
-  color: var(--background);
+  color: var(--text);
 }
 
 .load-task-text {
-  font-size: 1.5em;
+  font-size: 1em;
+  font-weight: bolder;
+  text-transform: uppercase;
 }

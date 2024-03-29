@@ -1,11 +1,20 @@
-import "./style.css";
-import { Plus } from "lucide-react";
 import { useState } from "react";
+import "./style.css";
 import { ITask } from "../../models/task";
-import Task from "../task/main";
+import RunStack from "./run-stack";
+import BackStack from "./back-stack";
 
-export default function Stack() {
+interface StackProps {
+  isRunStack: boolean;
+}
+
+export default function Stack({ isRunStack }: StackProps) {
   const [tasks, setTasks] = useState<ITask[]>([]);
+  const [runTasks, setRunTasks] = useState<ITask[]>([]);
+
+  function onTaskConclude(id: number) {
+    setRunTasks(() => runTasks.filter((task) => task.id !== id));
+  }
 
   function createTask() {
     const newTask: ITask = {
@@ -23,24 +32,33 @@ export default function Stack() {
     setTasks(() => tasks.filter((task) => task.id !== id));
   }
 
+  function updateTask(updateTasks: ITask[]) {
+    const newTasks = tasks.map((task) => {
+      const newTask = updateTasks.find(
+        (updateTask) => updateTask.id === task.id
+      );
+      return !newTask ? task : newTask;
+    });
+    setTasks(newTasks);
+  }
+
   return (
     <section className="stack-container">
       <div className="stack-heading">
-        <h1 className="stack-title text">Title</h1>
+        <h1 className="stack-title text">
+          {isRunStack ? "isRunStack" : "backStack"}
+        </h1>
       </div>
-      <div className="stack-body">
-        {tasks.length > 0 && (
-          <div className="stack-tasks-container">
-            {tasks.map((task, idx) => (
-              <Task key={idx} data={task} deleteTask={deleteTask} />
-            ))}
-          </div>
-        )}
-        <button className="button-add-task" onClick={() => createTask()}>
-          <Plus className="plus" />
-          <p className="text">Add new task</p>
-        </button>
-      </div>
+      {isRunStack ? (
+        <RunStack runTasks={runTasks} onTaskConclude={onTaskConclude} />
+      ) : (
+        <BackStack
+          tasks={tasks}
+          createTask={createTask}
+          updateTask={updateTask}
+          deleteTask={deleteTask}
+        />
+      )}
     </section>
   );
 }
