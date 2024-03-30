@@ -23,7 +23,7 @@ export default function Stack({
   onTaskConclude,
 }: StackProps) {
   return (
-    <section className="stack-container">
+    <aside className="stack-container">
       <div className="stack-heading">
         <h1 className="stack-title text">
           {isRunStack ? "runStack" : "backStack"}
@@ -39,6 +39,6 @@ export default function Stack({
           deleteTask={deleteTask}
         />
       )}
-    </section>
+    </aside>
   );
 }

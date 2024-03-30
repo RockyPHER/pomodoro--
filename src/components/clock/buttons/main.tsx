@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import "./style.css";
-import OngoingTask from "../ongoing-task/main";
+import Pannel from "../pannel/main";
 
 export default function ClockButtons() {
   const [isPlay, setIsPlay] = useState(false);
@@ -39,7 +39,7 @@ export default function ClockButtons() {
           </button>
         </div>
       ) : (
-        <OngoingTask />
+        <Pannel />
       )}
     </div>
   );
