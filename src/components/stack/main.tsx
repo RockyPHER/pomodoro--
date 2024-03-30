@@ -10,7 +10,6 @@ interface StackProps {
   createTask: () => void;
   updateTask: (updatedTask: ITask) => void;
   deleteTask: (id: number) => void;
-  onTaskConclude: (id: number) => void;
 }
 
 export default function Stack({
@@ -20,7 +19,6 @@ export default function Stack({
   createTask,
   updateTask,
   deleteTask,
-  onTaskConclude,
 }: StackProps) {
   return (
     <aside className="stack-container">
@@ -30,7 +28,7 @@ export default function Stack({
         </h1>
       </div>
       {isRunStack ? (
-        <RunStack runTasks={runTasks} onTaskConclude={onTaskConclude} />
+        <RunStack runTasks={runTasks} />
       ) : (
         <BackStack
           tasks={tasks}

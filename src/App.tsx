@@ -4,13 +4,20 @@ import { ITask } from "./models/task";
 import Stack from "./components/stack/main";
 
 export default function App() {
-  const [tasks, setTasks] = useState<ITask[]>([]);
+  const [backTasks, setBackTasks] = useState<ITask[]>([]);
   const [runTasks, setRunTasks] = useState<ITask[]>([]);
 
-  function onTaskConclude(id: number) {
-    setRunTasks(() => runTasks.filter((task) => task.id !== id));
+  function handleLoadTasks() {
+    setRunTasks(backTasks);
+    setBackTasks([]);
   }
 
+  // RunTask handling
+  function onTaskConclude() {
+    setRunTasks((currentTasks) => currentTasks.slice(1));
+  }
+
+  // BackTask handling
   function createTask() {
     const newTask: ITask = {
       id: Math.floor(Math.random() * Date.now()),
@@ -20,16 +27,14 @@ export default function App() {
       order: undefined,
     };
 
-    setTasks([...tasks, newTask]);
+    setBackTasks([...backTasks, newTask]);
   }
-
   function deleteTask(id: number) {
-    setTasks(() => tasks.filter((task) => task.id !== id));
+    setBackTasks(() => backTasks.filter((task) => task.id !== id));
   }
-
   function updateTask(updatedTask: ITask) {
-    setTasks(() =>
-      tasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
+    setBackTasks(() =>
+      backTasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
     );
   }
 
@@ -37,22 +42,25 @@ export default function App() {
     <main>
       <Stack
         isRunStack={false}
-        tasks={tasks}
+        tasks={backTasks}
         runTasks={runTasks}
         createTask={createTask}
         updateTask={updateTask}
         deleteTask={deleteTask}
-        onTaskConclude={onTaskConclude}
       />
-      <Clock />
+      <Clock
+        currentTask={runTasks[0]}
+        nextTask={runTasks[1]}
+        onTaskConclude={onTaskConclude}
+        handleLoadTasks={handleLoadTasks}
+      />
       <Stack
         isRunStack={true}
-        tasks={tasks}
+        tasks={backTasks}
         runTasks={runTasks}
         createTask={createTask}
         updateTask={updateTask}
         deleteTask={deleteTask}
-        onTaskConclude={onTaskConclude}
       />
     </main>
   );

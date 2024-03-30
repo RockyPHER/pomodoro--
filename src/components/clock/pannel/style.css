@@ -1,0 +1,9 @@
+@import "../../../styles/config.css";
+
+.pannel-container {
+  width: 400px;
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--background);
+}

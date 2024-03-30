@@ -1,10 +1,22 @@
 import "./style.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ITask } from "../../models/task";
 import ClockButtons from "./buttons/main";
 import { formatTime } from "../../scripts/timeFormat";
 
-export default function Clock() {
+interface ClockProps {
+  currentTask: ITask;
+  nextTask: ITask;
+  onTaskConclude: () => void;
+  handleLoadTasks: () => void;
+}
+
+export default function Clock({
+  currentTask,
+  nextTask,
+  onTaskConclude,
+  handleLoadTasks,
+}: ClockProps) {
   // variables
   const [currentTime, setCurrentTime] = useState(formatTime(0));
   const [warn, setWarn] = useState("");
@@ -16,18 +28,15 @@ export default function Clock() {
     start: false,
     stop: true,
     skip: false,
-    completed: false,
   };
 
-  const tasks: ITask[] = [];
-
   // Task
-  function setTaskValues(task: ITask) {
-    tasks.push(task);
+  function getCurrentTaskDuration() {
+    return currentTask.duration;
   }
-  function getNextTask() {
-    const currentTask = tasks.shift();
-    return currentTask ? currentTask.duration : 0;
+  function getNextTaskDuration() {
+    onTaskConclude();
+    return currentTask.duration;
   }
 
   // Handle timer props
@@ -43,37 +52,31 @@ export default function Clock() {
   }
 
   // Timer state controllers
-  function setResetTimer() {
+  function setDefaultTimer() {
     setTimes(0);
     Timer.start = false;
     Timer.stop = true;
   }
-  function setStartTimer() {
-    setTimes(getNextTask());
-    Timer.start = true;
-    Timer.stop = false;
-  }
-  function setStopTimer() {
-    setTimes(getNextTask());
+  function setResetTimer() {
+    setTimes(getCurrentTaskDuration());
     Timer.start = false;
     Timer.stop = true;
   }
-  function setSkipTimer() {
-    setTimes(getNextTask());
-    Timer.start = false;
+  function setStartTimer() {
+    setTimes(getNextTaskDuration());
+    Timer.start = true;
     Timer.stop = false;
+  }
+  function setCompleteTimer() {
+    setTimes(getNextTaskDuration());
+    Timer.start = false;
+    Timer.stop = true;
   }
   function setResumeTimer() {
     Timer.start = true;
   }
   function setPauseTimer() {
     Timer.start = false;
-  }
-  function setCompleteTimer() {
-    setTimes(getNextTask());
-    Timer.start = false;
-    Timer.stop = true;
-    Timer.completed = true;
   }
 
   // Timer core
@@ -100,9 +103,10 @@ export default function Clock() {
   // Timer handlers
   function handleStartTimer() {
     console.log("start");
-    if (tasks.length <= 0) {
-      console.log("invalid cycle");
-      setResetTimer();
+    //if no input provided, set default timer
+    if (!currentTask.duration) {
+      console.error("No Task duration found.");
+      setDefaultTimer();
       return;
     }
     //if paused and stoped, start new timer
@@ -121,20 +125,25 @@ export default function Clock() {
     setPauseTimer();
   }
   function handleSkipTimer() {
-    if (tasks.length >= 0) {
-      setResetTimer();
+    if (!currentTask.duration) {
+      setDefaultTimer();
       return;
     }
-    setSkipTimer();
+    if (!nextTask.duration) {
+      console.error("There is no more next tasks");
+      return;
+    }
+    setCompleteTimer();
   }
   function handleStopTimer() {
-    if (tasks.length >= 0) {
-      setResetTimer();
-      return;
-    }
-    setStopTimer();
+    setResetTimer();
   }
 
+  useEffect(() => {
+    if (currentTask) {
+      setCurrentTime(formatTime(currentTask.duration));
+    }
+  }, [currentTask]);
   return (
     <section className="clock-timer-container">
       <div className="clock-time-container">
@@ -142,7 +151,14 @@ export default function Clock() {
           {currentTime[0]}:{currentTime[1]}
         </span>
       </div>
-      <ClockButtons />
+      <ClockButtons
+        currentTask={currentTask}
+        nextTask={nextTask}
+        handleStartTimer={handleStartTimer}
+        handleSkipTimer={handleSkipTimer}
+        handleStopTimer={handleStopTimer}
+        handleLoadTasks={handleLoadTasks}
+      />
     </section>
   );
 }

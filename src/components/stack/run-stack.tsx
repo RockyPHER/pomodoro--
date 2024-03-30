@@ -3,9 +3,8 @@ import { ITask } from "../../models/task";
 
 interface RunStackProps {
   runTasks: ITask[];
-  onTaskConclude: (id: number) => void;
 }
-export default function RunStack({ runTasks, onTaskConclude }: RunStackProps) {
+export default function RunStack({ runTasks }: RunStackProps) {
   return (
     <div className="stack-body">
       {runTasks.length > 0 && (
