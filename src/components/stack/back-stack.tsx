@@ -1,13 +1,11 @@
-import "./style.css";
 import { Plus } from "lucide-react";
-import { useState } from "react";
 import { ITask } from "../../models/task";
 import Task from "../task/main";
 
 interface BackStackProps {
   tasks: ITask[];
   createTask: () => void;
-  updateTask: (updateTasks: ITask[]) => void;
+  updateTask: (updateTasks: ITask) => void;
   deleteTask: (id: number) => void;
 }
 
@@ -22,7 +20,13 @@ export default function BackStack({
       {tasks.length > 0 && (
         <div className="stack-tasks-container">
           {tasks.map((task, idx) => (
-            <Task key={idx} data={task} deleteTask={deleteTask} />
+            <Task
+              isRunTask={false}
+              key={idx}
+              data={task}
+              updateTask={updateTask}
+              deleteTask={deleteTask}
+            />
           ))}
         </div>
       )}

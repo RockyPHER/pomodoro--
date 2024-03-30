@@ -1,5 +1,3 @@
-import { useState } from "react";
-import "../style.css";
 import Task from "../task/main";
 import { ITask } from "../../models/task";
 
@@ -13,7 +11,13 @@ export default function RunStack({ runTasks, onTaskConclude }: RunStackProps) {
       {runTasks.length > 0 && (
         <div className="stack-tasks-container">
           {runTasks.map((task, idx) => (
-            <Task key={idx} data={task} deleteTask={() => {}} />
+            <Task
+              isRunTask={true}
+              key={idx}
+              data={task}
+              updateTask={() => {}}
+              deleteTask={() => {}}
+            />
           ))}
         </div>
       )}
