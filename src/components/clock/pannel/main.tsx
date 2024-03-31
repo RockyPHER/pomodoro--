@@ -5,7 +5,7 @@ import { Minus, Plus } from "lucide-react";
 
 interface PannelProps {
   currentTask: ITask;
-  nextTask: ITask;
+  nextTask: ITask | null;
 }
 
 export default function Pannel({ currentTask, nextTask }: PannelProps) {
@@ -42,18 +42,20 @@ export default function Pannel({ currentTask, nextTask }: PannelProps) {
               </div>
             )}
           </div>
-          <div className="next-task-container">
-            <div className="next-task-heading">
-              <span className="next-task-title text">{nextTask.title}</span>
-            </div>
-            {isNextTaskOpen && (
-              <div className="next-task-body">
-                <span className="next-task-description text">
-                  {nextTask.description}
-                </span>
+          {nextTask && (
+            <div className="next-task-container">
+              <div className="next-task-heading">
+                <span className="next-task-title text">{nextTask.title}</span>
               </div>
-            )}
-          </div>
+              {isNextTaskOpen && (
+                <div className="next-task-body">
+                  <span className="next-task-description text">
+                    {nextTask.description}
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
     </section>

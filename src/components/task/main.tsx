@@ -17,23 +17,36 @@ export default function Task({
   deleteTask,
   updateTask,
 }: TaskProps) {
+  const [task, setTask] = useState<ITask>({
+    id: data.id,
+    duration: data.duration,
+    title: data.title,
+    description: data.description,
+    order: data.order,
+  });
+
   const [editDuration, setEditDuration] = useState(false);
   const [editTitle, setEditTitle] = useState(true);
   const [openTask, setOpenTask] = useState(false);
-
-  const [duration, setDuration] = useState<number>(data.duration);
   const [formatedDuration, setFormatedDuration] = useState<string[]>(
     formatTime(data.duration)
   );
-  const [title, setTitle] = useState<string>(data.title);
-
-  useEffect(() => {
-    setFormatedDuration(formatTime(duration));
-  }, [duration]);
 
   function handleTimeInput(e: ChangeEvent<HTMLInputElement>) {
-    setDuration(parseInt(e.target.value));
+    setTask({
+      ...task,
+      duration: parseInt(e.target.value),
+    });
   }
+
+  useEffect(() => {
+    if (task !== data) {
+      updateTask(task);
+    }
+  }, [task]);
+  useEffect(() => {
+    setFormatedDuration(formatTime(task.duration));
+  }, [task.duration]);
 
   return (
     <div className="task-container">
@@ -41,27 +54,29 @@ export default function Task({
         <div className="task-heading-left">
           {editTitle && !isRunTask ? (
             <input
-              className="task-title-input"
               autoFocus
+              className="task-title-input"
               onBlur={() => setEditTitle(false)}
-              onChange={(e) => setTitle(e.target.value)}
-              value={title}
+              onFocus={(e) => e.target.select()}
+              onChange={(e) => setTask({ ...task, title: e.target.value })}
+              value={task.title}
             ></input>
           ) : (
             <span
               className="task-title-text text"
               onClick={() => setEditTitle(true)}
             >
-              {title}
+              {task.title}
             </span>
           )}
           {editDuration && !isRunTask ? (
             <input
-              className="task-duration-input"
               autoFocus
+              className="task-duration-input"
               onBlur={() => setEditDuration(false)}
+              onFocus={(e) => e.target.select()}
               onChange={(e) => handleTimeInput(e)}
-              value={duration}
+              value={task.duration}
               type="number"
               min={0}
             ></input>
@@ -78,14 +93,14 @@ export default function Task({
           <div className="task-heading-right">
             <button
               className="task-button-close"
-              onClick={() => deleteTask(data.id)}
+              onClick={() => deleteTask(task.id)}
             >
               <X className="x" />
             </button>
           </div>
         )}
       </div>
-      {openTask && <div className="task-description"></div>}
+      {openTask && <div className="task-description">{task.description}</div>}
     </div>
   );
 }

@@ -52,7 +52,7 @@ export default function App() {
       />
       <Clock
         currentTask={runTasks[0]}
-        nextTask={runTasks[1]}
+        nextTask={runTasks[1] ? runTasks[1] : null}
         onTaskConclude={onTaskConclude}
         handleLoadTasks={handleLoadTasks}
       />

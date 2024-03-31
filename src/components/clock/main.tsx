@@ -7,7 +7,7 @@ import Pannel from "./pannel/main";
 
 interface ClockProps {
   currentTask: ITask;
-  nextTask: ITask;
+  nextTask: ITask | null;
   onTaskConclude: () => void;
   handleLoadTasks: () => void;
 }
@@ -129,11 +129,11 @@ export default function Clock({
     setPauseTimer();
   }
   function handleSkipTimer() {
-    if (!currentTask.duration) {
+    if (!currentTask) {
       setDefaultTimer();
       return;
     }
-    if (!nextTask.duration) {
+    if (!nextTask) {
       console.error("There is no more next tasks");
       return;
     }
