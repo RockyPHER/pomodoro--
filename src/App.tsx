@@ -8,8 +8,10 @@ export default function App() {
   const [runTasks, setRunTasks] = useState<ITask[]>([]);
 
   function handleLoadTasks() {
-    setRunTasks(backTasks);
-    setBackTasks([]);
+    if (runTasks.length <= 0) {
+      setRunTasks(backTasks);
+      setBackTasks([]);
+    }
   }
 
   // RunTask handling

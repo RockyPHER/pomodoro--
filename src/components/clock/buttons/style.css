@@ -2,9 +2,8 @@
 
 .clock-buttons-container {
   display: flex;
-  flex-direction: column;
   gap: 2em;
-  justify-content: space-between;
+  flex-direction: column;
 }
 
 .clock-top-buttons-container {

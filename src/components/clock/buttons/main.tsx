@@ -1,12 +1,10 @@
 import "./style.css";
 import { ListEndIcon, Pause, Play, SkipForward, Square } from "lucide-react";
-import { useState } from "react";
-import Pannel from "../pannel/main";
 import { ITask } from "../../../models/task";
 
 interface ClockButtonsProps {
   currentTask: ITask;
-  nextTask: ITask;
+  isRunning: boolean;
   handleStartTimer: () => void;
   handleStopTimer: () => void;
   handleSkipTimer: () => void;
@@ -14,16 +12,13 @@ interface ClockButtonsProps {
 }
 
 export default function ClockButtons({
+  isRunning,
   currentTask,
-  nextTask,
   handleStartTimer,
   handleStopTimer,
   handleSkipTimer,
   handleLoadTasks,
 }: ClockButtonsProps) {
-  const [isPlay, setIsPlay] = useState(false);
-  const [hasTasks, setHasTasks] = useState(false);
-
   return (
     <div className="clock-buttons-container">
       <div className="clock-top-buttons-container">
@@ -31,10 +26,10 @@ export default function ClockButtons({
           <SkipForward className="clock-button-icon" />
         </button>
         <button
-          className={`clock-button-main ${isPlay ? "pause" : "play"}`}
+          className={`clock-button-main ${isRunning ? "pause" : "play"}`}
           onClick={() => handleStartTimer()}
         >
-          {isPlay ? (
+          {isRunning ? (
             <Pause className="clock-button-main-icon" />
           ) : (
             <Play className="clock-button-main-icon" />
@@ -44,7 +39,7 @@ export default function ClockButtons({
           <Square className="clock-button-icon" />
         </button>
       </div>
-      {!hasTasks ? (
+      {!currentTask && (
         <div className="clock-load-container">
           <button
             className="load-task-button"
@@ -54,8 +49,6 @@ export default function ClockButtons({
             <span className="load-task-text text">Load tasks</span>
           </button>
         </div>
-      ) : (
-        <Pannel currentTask={currentTask} nextTask={nextTask} />
       )}
     </div>
   );

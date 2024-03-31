@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { ITask } from "../../models/task";
 import ClockButtons from "./buttons/main";
 import { formatTime } from "../../scripts/timeFormat";
+import Pannel from "./pannel/main";
 
 interface ClockProps {
   currentTask: ITask;
@@ -19,7 +20,7 @@ export default function Clock({
 }: ClockProps) {
   // variables
   const [currentTime, setCurrentTime] = useState(formatTime(0));
-  const [warn, setWarn] = useState("");
+  const [isRunning, setIsRunning] = useState(false);
 
   const Timer = {
     time_start: 0,
@@ -81,6 +82,7 @@ export default function Clock({
 
   // Timer core
   function startTimer() {
+    setIsRunning(true);
     console.log("Timer started", Timer);
     const times = setInterval(timeCycle, 1000);
     function timeCycle() {
@@ -88,12 +90,14 @@ export default function Clock({
       if (!Timer.start || Timer.stop) {
         clearInterval(times);
         console.log("Timer stoped/paused");
+        setIsRunning(false);
         return;
       }
       if (Timer.time_current === 0) {
         clearInterval(times);
         setCompleteTimer();
         console.log("Timer completed", Timer);
+        setIsRunning(false);
         return;
       }
       updateTime();
@@ -145,20 +149,27 @@ export default function Clock({
     }
   }, [currentTask]);
   return (
-    <section className="clock-timer-container">
-      <div className="clock-time-container">
-        <span className="clock-time-text text">
-          {currentTime[0]}:{currentTime[1]}
-        </span>
+    <section className="clock-container">
+      <div className="clock-head-container">
+        <div className="clock-time-container">
+          <span className="clock-time text">
+            {currentTime[0]}:{currentTime[1]}
+          </span>
+        </div>
       </div>
-      <ClockButtons
-        currentTask={currentTask}
-        nextTask={nextTask}
-        handleStartTimer={handleStartTimer}
-        handleSkipTimer={handleSkipTimer}
-        handleStopTimer={handleStopTimer}
-        handleLoadTasks={handleLoadTasks}
-      />
+      <div className="clock-body-container">
+        <ClockButtons
+          currentTask={currentTask}
+          isRunning={isRunning}
+          handleStartTimer={handleStartTimer}
+          handleSkipTimer={handleSkipTimer}
+          handleStopTimer={handleStopTimer}
+          handleLoadTasks={handleLoadTasks}
+        />
+        {currentTask && (
+          <Pannel currentTask={currentTask} nextTask={nextTask} />
+        )}
+      </div>
     </section>
   );
 }
