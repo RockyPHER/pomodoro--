@@ -21,10 +21,9 @@ export default function BackStack({
         <div className="stack-tasks-container">
           {tasks.map((task, idx) => (
             <Task
-              isRunTask={false}
               key={idx}
               data={task}
-              order={idx}
+              isRunTask={false}
               updateTask={updateTask}
               deleteTask={deleteTask}
             />

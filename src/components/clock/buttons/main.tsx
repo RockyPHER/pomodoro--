@@ -5,19 +5,19 @@ import { ITask } from "../../../models/task";
 interface ClockButtonsProps {
   currentTask: ITask;
   isRunning: boolean;
-  handleStartTimer: () => void;
+  loadTasks: () => void;
   handleStopTimer: () => void;
   handleSkipTimer: () => void;
-  handleLoadTasks: () => void;
+  handleStartTimer: () => void;
 }
 
 export default function ClockButtons({
   isRunning,
   currentTask,
-  handleStartTimer,
+  loadTasks,
   handleStopTimer,
   handleSkipTimer,
-  handleLoadTasks,
+  handleStartTimer,
 }: ClockButtonsProps) {
   return (
     <div className="clock-buttons-container">
@@ -41,10 +41,7 @@ export default function ClockButtons({
       </div>
       {!currentTask && (
         <div className="clock-load-container">
-          <button
-            className="load-task-button"
-            onClick={() => handleLoadTasks()}
-          >
+          <button className="load-task-button" onClick={() => loadTasks()}>
             <ListEndIcon className="load-task-icon" />
             <span className="load-task-text text">Load tasks</span>
           </button>

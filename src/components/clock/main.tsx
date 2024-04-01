@@ -9,14 +9,14 @@ interface ClockProps {
   currentTask: ITask;
   nextTask: ITask | null;
   onTaskConclude: () => void;
-  handleLoadTasks: () => void;
+  loadTasks: () => void;
 }
 
 export default function Clock({
   currentTask,
   nextTask,
   onTaskConclude,
-  handleLoadTasks,
+  loadTasks,
 }: ClockProps) {
   // variables
   const [times, setTimes] = useState({
@@ -166,7 +166,7 @@ export default function Clock({
           handleStartTimer={handleStartTimer}
           handleSkipTimer={handleSkipTimer}
           handleStopTimer={handleStopTimer}
-          handleLoadTasks={handleLoadTasks}
+          loadTasks={loadTasks}
         />
         {currentTask && (
           <Pannel currentTask={currentTask} nextTask={nextTask} />

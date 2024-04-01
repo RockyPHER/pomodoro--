@@ -6,7 +6,6 @@ import { ITask } from "../../models/task";
 
 interface TaskProps {
   data: ITask;
-  order: number;
   isRunTask: boolean;
   deleteTask: (id: number) => void;
   updateTask: (updatedTask: ITask) => void;
@@ -14,7 +13,6 @@ interface TaskProps {
 
 export default function Task({
   data,
-  order,
   isRunTask,
   deleteTask,
   updateTask,
@@ -24,7 +22,7 @@ export default function Task({
     duration: data.duration,
     title: data.title,
     description: data.description,
-    order: order,
+    order: data.order,
   });
 
   const [editDuration, setEditDuration] = useState(false);

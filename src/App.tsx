@@ -7,8 +7,8 @@ export default function App() {
   const [backTasks, setBackTasks] = useState<ITask[]>([]);
   const [runTasks, setRunTasks] = useState<ITask[]>([]);
 
-  function handleLoadTasks() {
-    if (runTasks.length <= 0) {
+  function loadTasks() {
+    if (runTasks.length === 0) {
       setRunTasks(backTasks.filter((task) => task.duration !== 0));
       setBackTasks([]);
     }
@@ -28,7 +28,7 @@ export default function App() {
       title: "title",
       duration: 0,
       description: "",
-      order: undefined,
+      order: backTasks.length++,
     };
 
     setBackTasks([...backTasks, newTask]);
@@ -56,7 +56,7 @@ export default function App() {
         currentTask={runTasks[0]}
         nextTask={runTasks[1] ? runTasks[1] : null}
         onTaskConclude={onTaskConclude}
-        handleLoadTasks={handleLoadTasks}
+        loadTasks={loadTasks}
       />
       <Stack
         isRunStack={true}

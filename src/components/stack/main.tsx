@@ -4,18 +4,18 @@ import RunStack from "./run-stack";
 import BackStack from "./back-stack";
 
 interface StackProps {
-  isRunStack: boolean;
   tasks: ITask[];
   runTasks: ITask[];
+  isRunStack: boolean;
   createTask: () => void;
   updateTask: (updatedTask: ITask) => void;
   deleteTask: (id: number) => void;
 }
 
 export default function Stack({
-  isRunStack,
   tasks,
   runTasks,
+  isRunStack,
   createTask,
   updateTask,
   deleteTask,

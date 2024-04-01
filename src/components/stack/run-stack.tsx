@@ -11,9 +11,9 @@ export default function RunStack({ runTasks }: RunStackProps) {
         <div className="stack-tasks-container">
           {runTasks.map((task, idx) => (
             <Task
-              isRunTask={true}
               key={idx}
               data={task}
+              isRunTask={true}
               updateTask={() => {}}
               deleteTask={() => {}}
             />
