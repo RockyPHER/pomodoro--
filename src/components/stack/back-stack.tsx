@@ -24,6 +24,7 @@ export default function BackStack({
               isRunTask={false}
               key={idx}
               data={task}
+              order={idx}
               updateTask={updateTask}
               deleteTask={deleteTask}
             />

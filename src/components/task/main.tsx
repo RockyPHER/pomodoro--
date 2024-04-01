@@ -6,6 +6,7 @@ import { ITask } from "../../models/task";
 
 interface TaskProps {
   data: ITask;
+  order: number;
   isRunTask: boolean;
   deleteTask: (id: number) => void;
   updateTask: (updatedTask: ITask) => void;
@@ -13,6 +14,7 @@ interface TaskProps {
 
 export default function Task({
   data,
+  order,
   isRunTask,
   deleteTask,
   updateTask,
@@ -22,7 +24,7 @@ export default function Task({
     duration: data.duration,
     title: data.title,
     description: data.description,
-    order: data.order,
+    order: order,
   });
 
   const [editDuration, setEditDuration] = useState(false);
@@ -44,6 +46,7 @@ export default function Task({
       updateTask(task);
     }
   }, [task]);
+
   useEffect(() => {
     setFormatedDuration(formatTime(task.duration));
   }, [task.duration]);
@@ -51,6 +54,7 @@ export default function Task({
   return (
     <div className="task-container">
       <div className="task-heading">
+        <p>{task.order}</p>
         <div className="task-heading-left">
           {editTitle && !isRunTask ? (
             <input

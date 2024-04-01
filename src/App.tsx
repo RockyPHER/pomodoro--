@@ -9,14 +9,16 @@ export default function App() {
 
   function handleLoadTasks() {
     if (runTasks.length <= 0) {
-      setRunTasks(backTasks);
+      setRunTasks(backTasks.filter((task) => task.duration !== 0));
       setBackTasks([]);
     }
   }
 
   // RunTask handling
   function onTaskConclude() {
-    setRunTasks((currentTasks) => currentTasks.slice(1));
+    setRunTasks((currentTasks) =>
+      currentTasks.filter((task) => task !== currentTasks.shift())
+    );
   }
 
   // BackTask handling

@@ -31,7 +31,7 @@ export default function Pannel({ currentTask, nextTask }: PannelProps) {
           <div className="current-task-container">
             <div className="current-task-heading">
               <span className="current-task-title text">
-                {currentTask.title}
+                {currentTask.order} : {currentTask.title}
               </span>
             </div>
             {isCurrentTaskOpen && (
@@ -45,7 +45,9 @@ export default function Pannel({ currentTask, nextTask }: PannelProps) {
           {nextTask && (
             <div className="next-task-container">
               <div className="next-task-heading">
-                <span className="next-task-title text">{nextTask.title}</span>
+                <span className="next-task-title text">
+                  {nextTask.order} : {nextTask.title}
+                </span>
               </div>
               {isNextTaskOpen && (
                 <div className="next-task-body">

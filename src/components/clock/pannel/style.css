@@ -5,7 +5,6 @@
   height: auto;
   overflow: hidden;
   border-radius: 0.5em;
-  background-color: var(--background);
 }
 
 .pannel-heading {
@@ -13,6 +12,7 @@
   height: 2em;
   display: flex;
   justify-content: end;
+  background-color: var(--background);
 }
 
 .pannel-hide-button {
@@ -35,4 +35,8 @@
   height: 8em;
   padding: 1em;
   position: relative;
+  background-color: var(--surface-2);
+}
+
+.current-task-container {
 }

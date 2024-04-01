@@ -19,135 +19,137 @@ export default function Clock({
   handleLoadTasks,
 }: ClockProps) {
   // variables
-  const [currentTime, setCurrentTime] = useState(formatTime(0));
-  const [isRunning, setIsRunning] = useState(false);
-
-  const Timer = {
-    time_start: 0,
-    time_current: 0,
-    time_passed: 0,
-    start: false,
-    stop: true,
-    skip: false,
-  };
-
+  const [times, setTimes] = useState({
+    start_time: 0,
+    current_time: 0,
+    passed_time: 0,
+  });
+  const [state, setState] = useState({ is_running: false, stop: true });
+  const [currentTime, setCurrentTime] = useState(
+    formatTime(times.current_time)
+  );
   // Task
-  function getCurrentTaskDuration() {
+  function getTime() {
     return currentTask.duration;
   }
-  function getNextTaskDuration() {
+  function getNextTime() {
     onTaskConclude();
     return currentTask.duration;
   }
 
-  // Handle timer props
-  function setTimes(cycleTime: number) {
-    Timer.time_start = cycleTime;
-    Timer.time_current = Timer.time_start;
-    Timer.time_passed = Timer.time_start - Timer.time_current;
+  function pause() {
+    setState({ ...state, is_running: false });
   }
-  function updateTime() {
-    Timer.time_current--;
-    Timer.time_passed = Timer.time_start - Timer.time_current;
-    setCurrentTime(formatTime(Timer.time_current));
+  function start() {
+    setState({ is_running: true, stop: false });
+  }
+  function resume() {
+    setState({ ...state, is_running: true });
+  }
+  function reset() {
+    setState({ is_running: false, stop: true });
   }
 
   // Timer state controllers
-  function setDefaultTimer() {
-    setTimes(0);
-    Timer.start = false;
-    Timer.stop = true;
+  function setTimerDefault() {
+    setTimes({ start_time: 0, current_time: 0, passed_time: 0 });
+    reset();
   }
-  function setResetTimer() {
-    setTimes(getCurrentTaskDuration());
-    Timer.start = false;
-    Timer.stop = true;
+  function setTimerReset() {
+    setTimes((prev) => ({
+      ...prev,
+      current_time: prev.start_time,
+      passed_time: 0,
+    }));
+    reset();
   }
-  function setStartTimer() {
-    setTimes(getNextTaskDuration());
-    Timer.start = true;
-    Timer.stop = false;
+  function setTimerStart() {
+    setTimes({
+      start_time: getTime(),
+      current_time: getTime(),
+      passed_time: 0,
+    });
+    start();
+    startTimer();
   }
-  function setCompleteTimer() {
-    setTimes(getNextTaskDuration());
-    Timer.start = false;
-    Timer.stop = true;
-  }
-  function setResumeTimer() {
-    Timer.start = true;
-  }
-  function setPauseTimer() {
-    Timer.start = false;
+  function setTimerComplete() {
+    setTimes({
+      start_time: getNextTime(),
+      current_time: getNextTime(),
+      passed_time: 0,
+    });
+    reset();
   }
 
   // Timer core
   function startTimer() {
-    setIsRunning(true);
-    console.log("Timer started", Timer);
-    const times = setInterval(timeCycle, 1000);
+    console.log("Timer started", state);
+    const timer = setInterval(timeCycle, 1000);
     function timeCycle() {
-      console.log("C: " + Timer.time_current, "P: " + Timer.time_passed);
-      if (!Timer.start || Timer.stop) {
-        clearInterval(times);
-        console.log("Timer stoped/paused");
-        setIsRunning(false);
+      console.log("Time: ", times);
+      if (!state.is_running) {
+        console.log("Timer pause");
         return;
       }
-      if (Timer.time_current === 0) {
-        clearInterval(times);
-        setCompleteTimer();
-        console.log("Timer completed", Timer);
-        setIsRunning(false);
+      if (times.current_time === 0) {
+        clearInterval(timer);
+        setTimerComplete();
+        console.log("Timer completed", state);
         return;
       }
-      updateTime();
+      setTimes((prev) => ({
+        ...prev,
+        current_time: prev.current_time--,
+        passed_time: prev.passed_time++,
+      }));
     }
   }
 
   // Timer handlers
   function handleStartTimer() {
-    console.log("start");
+    console.log(state);
     //if no input provided, set default timer
-    if (!currentTask.duration) {
-      console.error("No Task duration found.");
-      setDefaultTimer();
+    if (!currentTask) {
+      console.error("No Task found.");
+      setTimerDefault();
+      return;
+    }
+    if (state.is_running && !state.stop) {
+      console.log("pause timer");
+      pause();
       return;
     }
     //if paused and stoped, start new timer
-    if (!Timer.start && Timer.stop) {
+    if (!state.is_running && state.stop) {
       console.log("start timer");
-      setStartTimer();
-      startTimer();
+      setTimerStart();
       return;
     }
     //if paused and not stoped, resume timer
-    if (!Timer.start && !Timer.stop) {
-      setResumeTimer();
-      startTimer();
+    if (!state.is_running && !state.stop) {
+      console.log("resume timer");
+      resume();
       return;
     }
-    setPauseTimer();
   }
   function handleSkipTimer() {
     if (!currentTask) {
-      setDefaultTimer();
+      setTimerDefault();
       return;
     }
     if (!nextTask) {
       console.error("There is no more next tasks");
       return;
     }
-    setCompleteTimer();
+    setTimerComplete();
   }
   function handleStopTimer() {
-    setResetTimer();
+    setTimerReset();
   }
 
   useEffect(() => {
-    if (currentTask) {
-      setCurrentTime(formatTime(currentTask.duration));
-    }
-  }, [currentTask]);
+    setCurrentTime(formatTime(times.current_time));
+  }, [times]);
   return (
     <section className="clock-container">
       <div className="clock-head-container">
@@ -160,7 +162,7 @@ export default function Clock({
       <div className="clock-body-container">
         <ClockButtons
           currentTask={currentTask}
-          isRunning={isRunning}
+          isRunning={state.is_running}
           handleStartTimer={handleStartTimer}
           handleSkipTimer={handleSkipTimer}
           handleStopTimer={handleStopTimer}
