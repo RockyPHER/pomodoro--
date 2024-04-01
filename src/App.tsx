@@ -16,9 +16,9 @@ export default function App() {
 
   // RunTask handling
   function onTaskConclude() {
-    setRunTasks((currentTasks) =>
-      currentTasks.filter((task) => task !== currentTasks.shift())
-    );
+    setRunTasks((availableTasks) => {
+      return availableTasks.splice(0, 1);
+    });
   }
 
   // BackTask handling
@@ -28,7 +28,7 @@ export default function App() {
       title: "title",
       duration: 0,
       description: "",
-      order: backTasks.length++,
+      order: backTasks.length + 1,
     };
 
     setBackTasks([...backTasks, newTask]);

@@ -52,7 +52,6 @@ export default function Task({
   return (
     <div className="task-container">
       <div className="task-heading">
-        <p>{task.order}</p>
         <div className="task-heading-left">
           {editTitle && !isRunTask ? (
             <input
@@ -68,7 +67,7 @@ export default function Task({
               className="task-title-text text"
               onClick={() => setEditTitle(true)}
             >
-              {task.title}
+              {task.order} : {task.title}
             </span>
           )}
           {editDuration && !isRunTask ? (
