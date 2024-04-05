@@ -6,17 +6,17 @@ import { formatTime } from "../../scripts/timeFormat";
 import Pannel from "./pannel/main";
 
 interface ClockProps {
-  currentTask: ITask;
   nextTask: ITask | null;
-  onTaskConclude: () => void;
+  currentTask: ITask;
   loadTasks: () => void;
+  onTaskConclude: () => void;
 }
 
 export default function Clock({
-  currentTask,
   nextTask,
-  onTaskConclude,
+  currentTask,
   loadTasks,
+  onTaskConclude,
 }: ClockProps) {
   // variables
   const [times, setTimes] = useState({
@@ -114,21 +114,25 @@ export default function Clock({
       setTimerDefault();
       return;
     }
+    //if playing, pause
     if (state.is_running && !state.stop) {
       console.log("pause timer");
       pause();
+      console.log(state);
       return;
     }
     //if paused and stoped, start new timer
     if (!state.is_running && state.stop) {
       console.log("start timer");
       setTimerStart();
+      console.log(state);
       return;
     }
-    //if paused and not stoped, resume timer
+    //if paused and not stoped, resume
     if (!state.is_running && !state.stop) {
       console.log("resume timer");
       resume();
+      console.log(state);
       return;
     }
   }
@@ -163,10 +167,10 @@ export default function Clock({
         <ClockButtons
           currentTask={currentTask}
           isRunning={state.is_running}
+          loadTasks={loadTasks}
           handleStartTimer={handleStartTimer}
           handleSkipTimer={handleSkipTimer}
           handleStopTimer={handleStopTimer}
-          loadTasks={loadTasks}
         />
         {currentTask && (
           <Pannel currentTask={currentTask} nextTask={nextTask} />
