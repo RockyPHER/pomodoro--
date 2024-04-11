@@ -4,10 +4,14 @@
   display: flex;
   gap: 2em;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .clock-top-buttons-container {
   display: flex;
+  justify-content: center;
+  align-items: center;
   gap: 2em;
 }
 
@@ -31,32 +35,52 @@
 }
 
 .clock-button-main {
-  padding: 1em;
+  width: 5em;
+  height: 5em;
+  padding: 0.2em;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   border: 0.18em solid transparent;
   border-radius: 9999px;
-  background-color: var(--background);
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
-.clock-button-main:hover {
+.button-has-task {
+  background-color: var(--background);
+}
+.button-has-task:hover {
   transform: scale(1.1);
   background-color: var(--background-1);
 }
-.clock-button-main:active {
+.button-has-task:active {
   transform: scale(1);
   background-color: var(--background-2);
 }
+.button-no-task {
+  background-color: var(--background);
+}
+.play-icon-no-task {
+  color: var(--surface);
+}
 
-.clock-button-main-icon {
+.play-icon {
+  color: var(--text);
+}
+.pause-icon {
   color: var(--text);
 }
 
+.clock-button-main-icon {
+  width: 2.5em;
+  height: 2.5em;
+}
+
 .clock-button-icon {
+  width: 1em;
+  height: 1em;
   color: var(--background);
 }
 .clock-button-icon:hover {
@@ -68,7 +92,7 @@
   fill: var(--primary);
 }
 
-.clock-load-container {
+.clock-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -89,11 +113,9 @@
   transition-duration: 150ms;
 }
 .load-task-button:hover {
-  transform: scale(1.1);
   background-color: var(--background-1);
 }
 .load-task-button:active {
-  transform: scale(1);
   background-color: var(--background-2);
 }
 

@@ -3,39 +3,51 @@ import { ListEndIcon, Pause, Play, SkipForward, Square } from "lucide-react";
 import { ITask } from "../../../models/task";
 
 interface ClockButtonsProps {
-  currentTask: ITask;
-  isRunning: boolean;
+  currentTask: ITask | undefined;
+  isPlay: boolean;
+  start: () => void;
+  pause: () => void;
+  reset: () => void;
   loadTasks: () => void;
-  handleStopTimer: () => void;
-  handleSkipTimer: () => void;
-  handleStartTimer: () => void;
 }
 
 export default function ClockButtons({
-  isRunning,
+  isPlay,
   currentTask,
+  start,
+  pause,
+  reset,
   loadTasks,
-  handleStopTimer,
-  handleSkipTimer,
-  handleStartTimer,
 }: ClockButtonsProps) {
+  const handlePlay = () => {
+    if (!currentTask) {
+      return;
+    }
+    isPlay ? pause() : start();
+  };
   return (
     <div className="clock-buttons-container">
       <div className="clock-top-buttons-container">
-        <button className="clock-button skip" onClick={() => handleSkipTimer()}>
+        <button className="clock-button skip" onClick={() => {}}>
           <SkipForward className="clock-button-icon" />
         </button>
         <button
-          className={`clock-button-main ${isRunning ? "pause" : "play"}`}
-          onClick={() => handleStartTimer()}
+          className={`clock-button-main ${
+            !currentTask ? "button-no-task" : "button-has-task"
+          }`}
+          onClick={() => handlePlay()}
         >
-          {isRunning ? (
-            <Pause className="clock-button-main-icon" />
+          {isPlay ? (
+            <Pause className="clock-button-main-icon pause-icon" />
           ) : (
-            <Play className="clock-button-main-icon" />
+            <Play
+              className={`clock-button-main-icon ${
+                !currentTask ? "play-icon-no-task" : "play-icon"
+              }`}
+            />
           )}
         </button>
-        <button className="clock-button stop" onClick={() => handleStopTimer()}>
+        <button className="clock-button stop" onClick={() => reset()}>
           <Square className="clock-button-icon" />
         </button>
       </div>

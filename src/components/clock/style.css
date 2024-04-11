@@ -18,6 +18,7 @@
 }
 
 .clock-time-container {
+  height: 10em;
   padding-inline: 1.5em;
   display: flex;
   justify-content: center;
@@ -39,4 +40,10 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+}
+
+.clock-button {
+  padding: 0.1em 0.3em;
+  cursor: pointer;
+  font-size: 3em;
 }
