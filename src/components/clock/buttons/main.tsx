@@ -51,13 +51,15 @@ export default function ClockButtons({
           <Square className="clock-button-icon" />
         </button>
       </div>
-      {!currentTask && (
+      {!currentTask ? (
         <div className="clock-load-container">
           <button className="load-task-button" onClick={() => loadTasks()}>
             <ListEndIcon className="load-task-icon" />
             <span className="load-task-text text">Load tasks</span>
           </button>
         </div>
+      ) : (
+        <div>CurrentTasks {currentTask.title + "|" + currentTask.duration}</div>
       )}
     </div>
   );

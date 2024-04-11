@@ -32,10 +32,14 @@ export default function Clock({
 
 function Timer({ startTime, isPlay, setIsPlay, onTaskConclude }: Props) {
   const [time, setTime] = useState(startTime);
+  const [isConclude, setIsConclude] = useState(true);
   const formatedTime = formatTime(time);
-
   useEffect(() => {
     console.log("reload", time);
+    if (time <= 0 && isConclude) {
+      setTime(startTime);
+      setIsConclude(false);
+    }
     const timerID = setInterval(() => {
       if (!isPlay) {
         clearInterval(timerID);
@@ -43,6 +47,7 @@ function Timer({ startTime, isPlay, setIsPlay, onTaskConclude }: Props) {
       }
       if (time <= 0) {
         console.log("Timer conclude!");
+        setIsConclude(true);
         setIsPlay(false);
         clearInterval(timerID);
         onTaskConclude();

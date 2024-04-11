@@ -7,6 +7,9 @@
   justify-content: space-between;
   align-items: center;
 }
+.task-selected {
+  outline: 1em solid var(--primary);
+}
 
 .task-heading {
   width: 100%;

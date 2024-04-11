@@ -3,8 +3,9 @@ import { ITask } from "../../models/task";
 
 interface RunStackProps {
   runTasks: ITask[];
+  currentTask: ITask;
 }
-export default function RunStack({ runTasks }: RunStackProps) {
+export default function RunStack({ runTasks, currentTask }: RunStackProps) {
   return (
     <div className="stack-body">
       {runTasks.length > 0 && (
@@ -14,6 +15,7 @@ export default function RunStack({ runTasks }: RunStackProps) {
               key={idx}
               data={task}
               isRunTask={true}
+              currentTask={currentTask}
               updateTask={() => {}}
               deleteTask={() => {}}
             />

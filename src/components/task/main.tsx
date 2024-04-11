@@ -7,6 +7,7 @@ import { ITask } from "../../models/task";
 interface TaskProps {
   data: ITask;
   isRunTask: boolean;
+  currentTask: ITask;
   deleteTask: (id: number) => void;
   updateTask: (updatedTask: ITask) => void;
 }
@@ -14,6 +15,7 @@ interface TaskProps {
 export default function Task({
   data,
   isRunTask,
+  currentTask,
   deleteTask,
   updateTask,
 }: TaskProps) {
@@ -50,7 +52,14 @@ export default function Task({
   }, [task.duration]);
 
   return (
-    <div className="task-container">
+    <div
+      className={`task-container ${
+        isRunTask &&
+        currentTask &&
+        currentTask.id === data.id &&
+        "task-selected"
+      }`}
+    >
       <div className="task-heading">
         <div className="task-heading-left">
           {editTitle && !isRunTask ? (

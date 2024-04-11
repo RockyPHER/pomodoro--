@@ -13,6 +13,7 @@ export default function App() {
   const [backTasks, setBackTasks] = useState<ITask[]>([]);
   const [runTasks, setRunTasks] = useState<ITask[]>([]);
   const [currentTask, setCurrentTask] = useState<ITask>();
+  console.log("tasks", backTasks, runTasks, currentTask);
 
   // Clock Timer handling
   const start = () => {
@@ -32,7 +33,7 @@ export default function App() {
   const loadTasks = () => {
     const filteredTasks = backTasks.filter((task) => task.duration !== 0);
     setCurrentTask(filteredTasks[0]);
-    setRunTasks(filteredTasks.slice(1));
+    setRunTasks(filteredTasks);
     setBackTasks([]);
     console.log("tasks loaded");
   };
