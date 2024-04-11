@@ -3,7 +3,26 @@ import { useEffect, useState } from "react";
 import { formatTime } from "../../scripts/timeFormat";
 
 export default function Clock() {
-  const [play, setPlay] = useState(false);
+  const [play, setPlay] = useState(true);
+  const [time, setTime] = useState(10);
+  const formatedTime = formatTime(time);
+
+  useEffect(() => {
+    console.log("reload", time);
+    const timerID = setInterval(() => {
+      if (play) {
+        if (time <= 0) {
+          console.log("Timer conclude!");
+          setPlay(false);
+          clearInterval(timerID);
+          return;
+        }
+        setTime(time - 1);
+        return;
+      }
+    }, 1000);
+    return () => clearInterval(timerID);
+  }, [time]);
 
   function pause() {
     setPlay(false);
@@ -18,7 +37,9 @@ export default function Clock() {
     <div className="clock-container">
       <div className="clock-head-container">
         <div className="clock-time-container">
-          <Timer newTime={10} play={play} setPlay={setPlay} />
+          <p className="clock-time text">
+            {formatedTime[0] + ":" + formatedTime[1]}
+          </p>
         </div>
       </div>
       <div className="clock-body-container">
@@ -26,43 +47,4 @@ export default function Clock() {
       </div>
     </div>
   );
-}
-
-interface TimerProps {
-  newTime: number;
-  play: boolean;
-  setPlay: React.Dispatch<React.SetStateAction<boolean>>;
-}
-function Timer({ newTime, play, setPlay }: TimerProps) {
-  const [time, setTime] = useState({ current: 0, passed: 0 });
-  const showTime = formatTime(time.current).join(":");
-
-  function reset() {
-    setTime({ current: newTime, passed: 0 });
-    console.log("reset");
-  }
-
-  useEffect(() => {
-    console.log("reload component");
-    console.log("time:", time);
-    if (time.current === 0 || time.current < 0) {
-      setPlay(false);
-      setTimeout(() => {
-        reset();
-      }, 500);
-      return;
-    }
-    if (!play) {
-      return;
-    }
-    // if play decrease timer
-    setTimeout(() => {
-      setTime((prev) => ({
-        current: prev.current - 1,
-        passed: prev.passed + 1,
-      }));
-    }, 1000);
-  });
-
-  return <p className="clock-time text">{showTime}</p>;
 }
