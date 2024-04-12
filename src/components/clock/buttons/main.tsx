@@ -59,7 +59,9 @@ export default function ClockButtons({
           </button>
         </div>
       ) : (
-        <div>CurrentTasks {currentTask.title + "|" + currentTask.duration}</div>
+        <div style={{ backgroundColor: "black", color: "white" }}>
+          {currentTask.order + currentTask.title + "|" + currentTask.duration}
+        </div>
       )}
     </div>
   );

@@ -3,7 +3,7 @@ import { ITask } from "../../models/task";
 
 interface RunStackProps {
   runTasks: ITask[];
-  currentTask: ITask;
+  currentTask: ITask | undefined;
 }
 export default function RunStack({ runTasks, currentTask }: RunStackProps) {
   return (

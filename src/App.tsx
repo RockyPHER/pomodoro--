@@ -13,6 +13,7 @@ export default function App() {
   const [backTasks, setBackTasks] = useState<ITask[]>([]);
   const [runTasks, setRunTasks] = useState<ITask[]>([]);
   const [currentTask, setCurrentTask] = useState<ITask>();
+  const [currentTaskIdx, setCurrentTaskIdx] = useState<number>(0);
   console.log("tasks", backTasks, runTasks, currentTask);
 
   // Clock Timer handling
@@ -43,11 +44,12 @@ export default function App() {
     }
   }
   function onTaskConclude() {
-    if (runTasks.length > 0) {
-      setCurrentTask(runTasks[0]);
-      setRunTasks(runTasks.slice(1));
+    if (currentTaskIdx <= runTasks.length) {
+      setCurrentTask(runTasks[currentTaskIdx]);
+      setCurrentTaskIdx(currentTaskIdx + 1);
       return;
     }
+    setCurrentTaskIdx(0);
     setCurrentTask(undefined);
     setRunTasks([]);
   }
@@ -77,6 +79,7 @@ export default function App() {
         isRunStack={false}
         tasks={backTasks}
         runTasks={runTasks}
+        currentTask={currentTask}
         createTask={createTask}
         updateTask={updateTask}
         deleteTask={deleteTask}
@@ -101,6 +104,7 @@ export default function App() {
         isRunStack={true}
         tasks={backTasks}
         runTasks={runTasks}
+        currentTask={currentTask}
         createTask={createTask}
         updateTask={updateTask}
         deleteTask={deleteTask}

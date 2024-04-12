@@ -7,6 +7,7 @@ interface StackProps {
   tasks: ITask[];
   runTasks: ITask[];
   isRunStack: boolean;
+  currentTask: ITask | undefined;
   createTask: () => void;
   updateTask: (updatedTask: ITask) => void;
   deleteTask: (id: number) => void;
@@ -16,6 +17,7 @@ export default function Stack({
   tasks,
   runTasks,
   isRunStack,
+  currentTask,
   createTask,
   updateTask,
   deleteTask,
@@ -28,7 +30,7 @@ export default function Stack({
         </h1>
       </div>
       {isRunStack ? (
-        <RunStack runTasks={runTasks} />
+        <RunStack runTasks={runTasks} currentTask={currentTask} />
       ) : (
         <BackStack
           tasks={tasks}

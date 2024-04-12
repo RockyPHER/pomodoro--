@@ -7,7 +7,7 @@ import { ITask } from "../../models/task";
 interface TaskProps {
   data: ITask;
   isRunTask: boolean;
-  currentTask: ITask;
+  currentTask: ITask | undefined;
   deleteTask: (id: number) => void;
   updateTask: (updatedTask: ITask) => void;
 }
@@ -27,12 +27,11 @@ export default function Task({
     order: data.order,
   });
 
+  const [isSelected, setIsSelected] = useState(false);
   const [editDuration, setEditDuration] = useState(false);
   const [editTitle, setEditTitle] = useState(true);
   const [openTask, setOpenTask] = useState(false);
-  const [formatedDuration, setFormatedDuration] = useState<string[]>(
-    formatTime(data.duration)
-  );
+  const formatedDuration = formatTime(task.duration);
 
   function handleTimeInput(e: ChangeEvent<HTMLInputElement>) {
     setTask({
@@ -42,25 +41,17 @@ export default function Task({
   }
 
   useEffect(() => {
-    if (task !== data) {
+    if (!isRunTask && task !== data) {
       updateTask(task);
     }
-  }, [task]);
-
-  useEffect(() => {
-    setFormatedDuration(formatTime(task.duration));
-  }, [task.duration]);
+    if (isRunTask && currentTask && currentTask.id === data.id) {
+      setIsSelected(true);
+    }
+  }, [task, currentTask]);
 
   return (
-    <div
-      className={`task-container ${
-        isRunTask &&
-        currentTask &&
-        currentTask.id === data.id &&
-        "task-selected"
-      }`}
-    >
-      <div className="task-heading">
+    <div className="task-container">
+      <div className={`${isSelected ? "task-selected" : "task-heading"}`}>
         <div className="task-heading-left">
           {editTitle && !isRunTask ? (
             <input
