@@ -26,6 +26,7 @@ export default function BackStack({
               isRunTask={false}
               updateTask={updateTask}
               deleteTask={deleteTask}
+              currentTask={undefined}
             />
           ))}
         </div>

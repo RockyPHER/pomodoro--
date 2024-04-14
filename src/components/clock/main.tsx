@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { formatTime } from "../../scripts/timeFormat";
 
 interface Props {
+  hasRunTasks: boolean;
   startTime: number;
   isPlay: boolean;
   setIsPlay: React.Dispatch<React.SetStateAction<boolean>>;
@@ -10,6 +11,7 @@ interface Props {
 }
 
 export default function Clock({
+  hasRunTasks,
   startTime,
   isPlay,
   setIsPlay,
@@ -19,6 +21,7 @@ export default function Clock({
     <div className="clock-container">
       <div className="clock-head-container">
         <Timer
+          hasRunTasks={hasRunTasks}
           startTime={startTime}
           isPlay={isPlay}
           setIsPlay={setIsPlay}
@@ -30,33 +33,43 @@ export default function Clock({
   );
 }
 
-function Timer({ startTime, isPlay, setIsPlay, onTaskConclude }: Props) {
+function Timer({
+  hasRunTasks,
+  startTime,
+  isPlay,
+  setIsPlay,
+  onTaskConclude,
+}: Props) {
   const [time, setTime] = useState(startTime);
   const [isConclude, setIsConclude] = useState(true);
   const formatedTime = formatTime(time);
   useEffect(() => {
-    console.log("reload", time);
-    if (time <= 0 && isConclude) {
-      setTime(startTime);
-      setIsConclude(false);
+    console.log("reload", time, isConclude);
+    if (hasRunTasks) {
+      if (time === 0 && isConclude) {
+        console.log("task is conclude, reseting...");
+        setTime(startTime);
+        setIsConclude(false);
+        return;
+      }
+      const timerID = setInterval(() => {
+        if (!isPlay) {
+          clearInterval(timerID);
+          return;
+        }
+        if (time <= 0) {
+          console.log("Timer conclude!");
+          setIsConclude(true);
+          setIsPlay(false);
+          clearInterval(timerID);
+          onTaskConclude();
+          return;
+        }
+        setTime(time - 1);
+        return;
+      }, 1000);
+      return () => clearInterval(timerID);
     }
-    const timerID = setInterval(() => {
-      if (!isPlay) {
-        clearInterval(timerID);
-        return;
-      }
-      if (time <= 0) {
-        console.log("Timer conclude!");
-        setIsConclude(true);
-        setIsPlay(false);
-        clearInterval(timerID);
-        onTaskConclude();
-        return;
-      }
-      setTime(time - 1);
-      return;
-    }, 1000);
-    return () => clearInterval(timerID);
   }, [time, isPlay]);
 
   return (

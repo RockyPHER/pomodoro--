@@ -8,12 +8,13 @@ import ClockButtons from "./components/clock/buttons/main";
 export default function App() {
   // Clock controllers
   const [isPlay, setIsPlay] = useState(false);
+  const [hasRunTasks, setHasRunTasks] = useState(false);
 
   // Task states
   const [backTasks, setBackTasks] = useState<ITask[]>([]);
   const [runTasks, setRunTasks] = useState<ITask[]>([]);
   const [currentTask, setCurrentTask] = useState<ITask>();
-  const [currentTaskIdx, setCurrentTaskIdx] = useState<number>(0);
+  const [currentTaskIdx, setCurrentTaskIdx] = useState<number>(1);
   console.log("tasks", backTasks, runTasks, currentTask);
 
   // Clock Timer handling
@@ -33,6 +34,7 @@ export default function App() {
   // RunTask handling
   const loadTasks = () => {
     const filteredTasks = backTasks.filter((task) => task.duration !== 0);
+    setHasRunTasks(true);
     setCurrentTask(filteredTasks[0]);
     setRunTasks(filteredTasks);
     setBackTasks([]);
@@ -44,11 +46,19 @@ export default function App() {
     }
   }
   function onTaskConclude() {
-    if (currentTaskIdx <= runTasks.length) {
+    console.log("current idx:", currentTaskIdx, runTasks.length);
+    const maxIdx = runTasks.length;
+    if (maxIdx > currentTaskIdx || currentTaskIdx === maxIdx) {
       setCurrentTask(runTasks[currentTaskIdx]);
       setCurrentTaskIdx(currentTaskIdx + 1);
+      console.log("idx++");
       return;
     }
+    clearRunTasks();
+  }
+  function clearRunTasks() {
+    console.log("clearing runTasks");
+    setHasRunTasks(false);
     setCurrentTaskIdx(0);
     setCurrentTask(undefined);
     setRunTasks([]);
@@ -86,6 +96,7 @@ export default function App() {
       />
       <div className="main-clock">
         <Clock
+          hasRunTasks={hasRunTasks}
           startTime={currentTask ? currentTask.duration : 0}
           isPlay={isPlay}
           setIsPlay={setIsPlay}
