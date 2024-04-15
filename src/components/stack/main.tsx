@@ -10,7 +10,7 @@ interface StackProps {
   currentTask: ITask | undefined;
   createTask: () => void;
   updateTask: (updatedTask: ITask) => void;
-  deleteTask: (id: number) => void;
+  deleteTask: (delTask: ITask) => void;
 }
 
 export default function Stack({
@@ -33,7 +33,7 @@ export default function Stack({
         <RunStack runTasks={runTasks} currentTask={currentTask} />
       ) : (
         <BackStack
-          tasks={tasks}
+          backTasks={tasks}
           createTask={createTask}
           updateTask={updateTask}
           deleteTask={deleteTask}

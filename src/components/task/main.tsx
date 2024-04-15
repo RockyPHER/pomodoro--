@@ -8,7 +8,7 @@ interface TaskProps {
   data: ITask;
   isRunTask: boolean;
   currentTask: ITask | undefined;
-  deleteTask: (id: number) => void;
+  deleteTask: (delTask: ITask) => void;
   updateTask: (updatedTask: ITask) => void;
 }
 
@@ -44,8 +44,13 @@ export default function Task({
     if (!isRunTask && task !== data) {
       updateTask(task);
     }
-    if (isRunTask && currentTask && currentTask.id === data.id) {
-      setIsSelected(true);
+    if (isRunTask && currentTask) {
+      if (currentTask.id === data.id) {
+        setIsSelected(true);
+      }
+      if (currentTask.id !== data.id) {
+        setIsSelected(false);
+      }
     }
   }, [task, currentTask]);
 
@@ -94,7 +99,7 @@ export default function Task({
           <div className="task-heading-right">
             <button
               className="task-button-close"
-              onClick={() => deleteTask(task.id)}
+              onClick={() => deleteTask(task)}
             >
               <X className="x" />
             </button>

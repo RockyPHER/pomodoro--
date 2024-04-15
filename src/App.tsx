@@ -76,8 +76,10 @@ export default function App() {
     };
     setBackTasks([...backTasks, newTask]);
   }
-  function deleteTask(id: number) {
-    setBackTasks(backTasks.filter((task) => task.id !== id));
+  function deleteTask(delTask: ITask) {
+    const newBackTasks = backTasks.filter((task) => task.id !== delTask.id);
+    console.log("Delete task", delTask);
+    setBackTasks(newBackTasks);
   }
   function updateTask(updatedTask: ITask) {
     setBackTasks(
