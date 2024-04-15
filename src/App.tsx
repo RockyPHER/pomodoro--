@@ -117,6 +117,7 @@ export default function App() {
       <Stack
         isRunStack={false}
         tasks={backTasks}
+        setBackTasks={setBackTasks}
         runTasks={runTasks}
         currentTask={currentTask}
         createTask={createTask}
@@ -153,6 +154,7 @@ export default function App() {
         tasks={backTasks}
         runTasks={runTasks}
         currentTask={currentTask}
+        setBackTasks={setBackTasks}
         createTask={createTask}
         updateTask={updateTask}
         deleteTask={deleteTask}

@@ -8,6 +8,7 @@ interface StackProps {
   runTasks: ITask[];
   isRunStack: boolean;
   currentTask: ITask | undefined;
+  setBackTasks: React.Dispatch<React.SetStateAction<ITask[]>>;
   createTask: () => void;
   updateTask: (updatedTask: ITask) => void;
   deleteTask: (delTask: ITask) => void;
@@ -18,6 +19,7 @@ export default function Stack({
   runTasks,
   isRunStack,
   currentTask,
+  setBackTasks,
   createTask,
   updateTask,
   deleteTask,
@@ -34,6 +36,7 @@ export default function Stack({
       ) : (
         <BackStack
           backTasks={tasks}
+          setBackTasks={setBackTasks}
           createTask={createTask}
           updateTask={updateTask}
           deleteTask={deleteTask}
