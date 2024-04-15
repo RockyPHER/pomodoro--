@@ -3,6 +3,8 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { formatTime } from "../../scripts/timeFormat";
 import { X } from "lucide-react";
 import { ITask } from "../../models/task";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface TaskProps {
   data: ITask;
@@ -26,6 +28,13 @@ export default function Task({
     description: data.description,
     order: data.order,
   });
+
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: data.id });
+  const style = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+  };
 
   const [isSelected, setIsSelected] = useState(false);
   const [editDuration, setEditDuration] = useState(false);
@@ -55,7 +64,13 @@ export default function Task({
   }, [task, currentTask]);
 
   return (
-    <div className="task-container">
+    <div
+      style={style}
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      className="task-container"
+    >
       <div className={`${isSelected ? "task-selected" : "task-heading"}`}>
         <div className="task-heading-left">
           {editTitle && !isRunTask ? (
