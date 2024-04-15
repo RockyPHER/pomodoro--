@@ -8,6 +8,7 @@ import ClockButtons from "./components/clock/buttons/main";
 export default function App() {
   // Clock controllers
   const [isPlay, setIsPlay] = useState(false);
+  const [isReset, setIsReset] = useState(false);
   const [hasRunTasks, setHasRunTasks] = useState(false);
 
   // Task states
@@ -20,6 +21,9 @@ export default function App() {
   // Clock Timer handling
   const start = () => {
     console.log("start");
+    if (isReset) {
+      setIsReset(false);
+    }
     setIsPlay(true);
   };
   const pause = () => {
@@ -28,6 +32,11 @@ export default function App() {
   };
   const reset = () => {
     console.log("reset");
+    setIsReset(true);
+    setIsPlay(false);
+  };
+  const skip = () => {
+    console.log("skip");
     setIsPlay(false);
   };
 
@@ -102,8 +111,10 @@ export default function App() {
         <Clock
           hasRunTasks={hasRunTasks}
           startTime={currentTask ? currentTask.duration : 0}
+          isReset={isReset}
           isPlay={isPlay}
           setIsPlay={setIsPlay}
+          setIsReset={setIsReset}
           onTaskConclude={onTaskConclude}
         />
         <ClockButtons
