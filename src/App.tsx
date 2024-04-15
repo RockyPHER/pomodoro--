@@ -14,7 +14,7 @@ export default function App() {
   const [backTasks, setBackTasks] = useState<ITask[]>([]);
   const [runTasks, setRunTasks] = useState<ITask[]>([]);
   const [currentTask, setCurrentTask] = useState<ITask>();
-  const [currentTaskIdx, setCurrentTaskIdx] = useState<number>(1);
+  const [currentIdx, setCurrentIdx] = useState<number>(0);
   console.log("tasks", backTasks, runTasks, currentTask);
 
   // Clock Timer handling
@@ -35,7 +35,7 @@ export default function App() {
   const loadTasks = () => {
     const filteredTasks = backTasks.filter((task) => task.duration !== 0);
     setHasRunTasks(true);
-    setCurrentTask(filteredTasks[0]);
+    setCurrentTask(filteredTasks[currentIdx]);
     setRunTasks(filteredTasks);
     setBackTasks([]);
     console.log("tasks loaded");
@@ -46,20 +46,22 @@ export default function App() {
     }
   }
   function onTaskConclude() {
-    console.log("current idx:", currentTaskIdx, runTasks.length);
-    const maxIdx = runTasks.length;
-    if (maxIdx > currentTaskIdx || currentTaskIdx === maxIdx) {
-      setCurrentTask(runTasks[currentTaskIdx]);
-      setCurrentTaskIdx(currentTaskIdx + 1);
-      console.log("idx++");
+    const nextIdx = currentIdx + 1;
+    const maxIdx = runTasks.length - 1;
+    console.log("task conclude:", nextIdx, maxIdx);
+    if (nextIdx <= maxIdx) {
+      console.log("setting next idx");
+      setCurrentIdx(currentIdx + 1);
+      setCurrentTask(runTasks[currentIdx + 1]);
       return;
     }
+    console.log("nextIdx dont exist");
     clearRunTasks();
   }
   function clearRunTasks() {
     console.log("clearing runTasks");
     setHasRunTasks(false);
-    setCurrentTaskIdx(0);
+    setCurrentIdx(0);
     setCurrentTask(undefined);
     setRunTasks([]);
   }
