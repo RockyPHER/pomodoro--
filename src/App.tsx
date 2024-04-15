@@ -7,8 +7,12 @@ import ClockButtons from "./components/clock/buttons/main";
 
 export default function App() {
   // Clock controllers
+  const [time, setTime] = useState(0);
+
   const [isPlay, setIsPlay] = useState(false);
   const [isReset, setIsReset] = useState(false);
+  const [taskIsDone, setTaskIsDone] = useState(true);
+  const [stackIsDone, setStackIsDone] = useState(true);
   const [hasRunTasks, setHasRunTasks] = useState(false);
 
   // Task states
@@ -21,10 +25,10 @@ export default function App() {
   // Clock Timer handling
   const start = () => {
     console.log("start");
-    if (isReset) {
+    if (currentTask) {
       setIsReset(false);
+      setIsPlay(true);
     }
-    setIsPlay(true);
   };
   const pause = () => {
     console.log("pause");
@@ -32,11 +36,16 @@ export default function App() {
   };
   const reset = () => {
     console.log("reset");
-    setIsReset(true);
-    setIsPlay(false);
+    if (currentTask) {
+      setTime(currentTask.duration);
+      setIsReset(true);
+      setIsPlay(false);
+    }
   };
   const skip = () => {
     console.log("skip");
+    getNextTask();
+    setIsReset(true);
     setIsPlay(false);
   };
 
@@ -45,6 +54,7 @@ export default function App() {
     const filteredTasks = backTasks.filter((task) => task.duration !== 0);
     setHasRunTasks(true);
     setCurrentTask(filteredTasks[currentIdx]);
+    setTime(filteredTasks[currentIdx].duration);
     setRunTasks(filteredTasks);
     setBackTasks([]);
     console.log("tasks loaded");
@@ -54,21 +64,27 @@ export default function App() {
       loadTasks();
     }
   }
-  function onTaskConclude() {
+  function getNextTask() {
     const nextIdx = currentIdx + 1;
     const maxIdx = runTasks.length - 1;
+    setTaskIsDone(true);
     console.log("task conclude:", nextIdx, maxIdx);
     if (nextIdx <= maxIdx) {
       console.log("setting next idx");
-      setCurrentIdx(currentIdx + 1);
-      setCurrentTask(runTasks[currentIdx + 1]);
+      const nextTask = runTasks[nextIdx];
+      setCurrentIdx(nextIdx);
+      setCurrentTask(nextTask);
+      setTime(nextTask.duration);
       return;
     }
     console.log("nextIdx dont exist");
     clearRunTasks();
+    return;
   }
   function clearRunTasks() {
     console.log("clearing runTasks");
+    setTime(0);
+    setStackIsDone(true);
     setHasRunTasks(false);
     setCurrentIdx(0);
     setCurrentTask(undefined);
@@ -110,12 +126,17 @@ export default function App() {
       <div className="main-clock">
         <Clock
           hasRunTasks={hasRunTasks}
-          startTime={currentTask ? currentTask.duration : 0}
+          stackIsDone={stackIsDone}
+          taskIsDone={taskIsDone}
           isReset={isReset}
           isPlay={isPlay}
+          time={time}
+          setTime={setTime}
           setIsPlay={setIsPlay}
           setIsReset={setIsReset}
-          onTaskConclude={onTaskConclude}
+          setTaskIsDone={setTaskIsDone}
+          setStackIsDone={setStackIsDone}
+          onTaskConclude={getNextTask}
         />
         <ClockButtons
           isPlay={isPlay}
@@ -123,6 +144,7 @@ export default function App() {
           start={start}
           pause={pause}
           reset={reset}
+          skip={skip}
           loadTasks={handleLoadTasks}
         />
       </div>

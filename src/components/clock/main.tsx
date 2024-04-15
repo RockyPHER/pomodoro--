@@ -1,24 +1,34 @@
 import "./style.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { formatTime } from "../../scripts/timeFormat";
 
 interface Props {
   hasRunTasks: boolean;
-  startTime: number;
+  stackIsDone: boolean;
+  taskIsDone: boolean;
   isReset: boolean;
   isPlay: boolean;
+  time: number;
+  setTime: React.Dispatch<React.SetStateAction<number>>;
   setIsPlay: React.Dispatch<React.SetStateAction<boolean>>;
   setIsReset: React.Dispatch<React.SetStateAction<boolean>>;
+  setTaskIsDone: React.Dispatch<React.SetStateAction<boolean>>;
+  setStackIsDone: React.Dispatch<React.SetStateAction<boolean>>;
   onTaskConclude: () => void;
 }
 
 export default function Clock({
   hasRunTasks,
-  startTime,
+  stackIsDone,
+  taskIsDone,
   isReset,
   isPlay,
+  time,
+  setTime,
   setIsPlay,
   setIsReset,
+  setTaskIsDone,
+  setStackIsDone,
   onTaskConclude,
 }: Props) {
   return (
@@ -26,11 +36,16 @@ export default function Clock({
       <div className="clock-head-container">
         <Timer
           hasRunTasks={hasRunTasks}
-          startTime={startTime}
+          stackIsDone={stackIsDone}
+          taskIsDone={taskIsDone}
           isReset={isReset}
           isPlay={isPlay}
+          time={time}
+          setTime={setTime}
           setIsPlay={setIsPlay}
           setIsReset={setIsReset}
+          setTaskIsDone={setTaskIsDone}
+          setStackIsDone={setStackIsDone}
           onTaskConclude={onTaskConclude}
         />
       </div>
@@ -41,28 +56,20 @@ export default function Clock({
 
 function Timer({
   hasRunTasks,
-  startTime,
   isReset,
   isPlay,
+  time,
+  setTime,
   setIsPlay,
   setIsReset,
   onTaskConclude,
 }: Props) {
-  const [time, setTime] = useState(startTime);
-  const [isZero, setIsZero] = useState(true);
   const formatedTime = formatTime(time);
   useEffect(() => {
-    console.log("reload", time, isZero);
+    console.log("reload", time);
     if (hasRunTasks) {
-      if (time === 0 && isZero) {
-        console.log("time is zero, reseting...");
-        setTime(startTime);
-        setIsZero(false);
-        return;
-      }
       // reset
       if (isReset && !isPlay) {
-        setTime(startTime);
         return;
       }
       const timerID = setInterval(() => {
@@ -74,10 +81,10 @@ function Timer({
         // conclude
         if (time <= 0) {
           console.log("Timer conclude!");
-          setIsZero(true);
           setIsPlay(false);
-          clearInterval(timerID);
+          setIsReset(true);
           onTaskConclude();
+          clearInterval(timerID);
           return;
         }
         // resume

@@ -8,6 +8,7 @@ interface ClockButtonsProps {
   start: () => void;
   pause: () => void;
   reset: () => void;
+  skip: () => void;
   loadTasks: () => void;
 }
 
@@ -17,6 +18,7 @@ export default function ClockButtons({
   start,
   pause,
   reset,
+  skip,
   loadTasks,
 }: ClockButtonsProps) {
   const handlePlay = () => {
@@ -28,7 +30,7 @@ export default function ClockButtons({
   return (
     <div className="clock-buttons-container">
       <div className="clock-top-buttons-container">
-        <button className="clock-button skip" onClick={() => {}}>
+        <button className="clock-button skip" onClick={() => skip()}>
           <SkipForward className="clock-button-icon" />
         </button>
         <button
