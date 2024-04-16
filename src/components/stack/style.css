@@ -5,7 +5,8 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  border: 2px solid var(--background);
+  background-color: var(--surface);
+  border: 2px solid var(--surface-1);
   border-radius: 10px;
   overflow: hidden;
 }
@@ -17,7 +18,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--background-1);
 }
 
 .stack-title {
@@ -32,7 +32,6 @@
   display: flex;
   flex-direction: column;
   gap: 1em;
-  background-color: var(--surface-2);
 }
 
 .stack-tasks-container {
@@ -52,16 +51,16 @@
   gap: 4px;
   justify-content: start;
   align-items: center;
-  background-color: var(--surface-2);
-  border: 0.18em dashed var(--surface);
+  background-color: var(--background);
+  border: 0.18em dashed var(--surface-2);
   border-radius: 5px;
   cursor: pointer;
 }
 .button-add-task:hover {
-  background-color: var(--surface-1);
+  background-color: var(--background-1);
 }
 .button-add-task:active {
-  background-color: var(--surface-2);
+  background-color: var(--background-2);
 }
 
 .plus {

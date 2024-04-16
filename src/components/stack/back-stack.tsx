@@ -10,7 +10,10 @@ import {
   closestCorners,
   DndContext,
   DragEndEvent,
+  PointerSensor,
   UniqueIdentifier,
+  useSensor,
+  useSensors,
 } from "@dnd-kit/core";
 
 interface BackStackProps {
@@ -28,6 +31,14 @@ export default function BackStack({
   updateTask,
   deleteTask,
 }: BackStackProps) {
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        delay: 150,
+        tolerance: 5,
+      },
+    })
+  );
   const tasks = backTasks;
   const tasksComponents =
     tasks &&
@@ -64,6 +75,7 @@ export default function BackStack({
       {tasks.length > 0 && (
         <div className="stack-tasks-container">
           <DndContext
+            sensors={sensors}
             onDragEnd={handleDragEnd}
             collisionDetection={closestCorners}
           >

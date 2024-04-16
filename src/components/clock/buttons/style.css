@@ -84,8 +84,8 @@
   color: var(--background);
 }
 .clock-button-icon:hover {
-  color: var(--primary-1);
-  fill: var(--primary-1);
+  color: var(--background-1);
+  fill: var(--background-1);
 }
 .clock-button-icon:active {
   color: var(--primary);
