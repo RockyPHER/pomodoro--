@@ -26,7 +26,6 @@ export default function Task({
     duration: data.duration,
     title: data.title,
     description: data.description,
-    order: data.order,
   });
 
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -87,7 +86,7 @@ export default function Task({
               className="task-title-text text"
               onClick={() => setEditTitle(true)}
             >
-              {task.order} : {task.title}
+              {task.title}
             </span>
           )}
           {editDuration && !isRunTask ? (

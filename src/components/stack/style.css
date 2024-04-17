@@ -5,9 +5,10 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: var(--surface);
-  border: 2px solid var(--surface-1);
+  background-color: var(--surface-2);
+  border: 2px solid var(--text-1);
   border-radius: 10px;
+  backdrop-filter: blur(3px);
   overflow: hidden;
 }
 
@@ -52,7 +53,7 @@
   justify-content: start;
   align-items: center;
   background-color: var(--background);
-  border: 0.18em dashed var(--surface-2);
+  border: 0.18em dashed var(--text-1);
   border-radius: 5px;
   cursor: pointer;
 }

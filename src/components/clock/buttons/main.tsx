@@ -1,6 +1,7 @@
 import "./style.css";
-import { ListEndIcon, Pause, Play, SkipForward, Square } from "lucide-react";
+import { ListEndIcon, Pause, Play, RotateCcw, SkipForward } from "lucide-react";
 import { ITask } from "../../../models/task";
+import { Pannel } from "../pannel/main";
 
 interface ClockButtonsProps {
   currentTask: ITask | undefined;
@@ -50,7 +51,7 @@ export default function ClockButtons({
           )}
         </button>
         <button className="clock-button stop" onClick={() => reset()}>
-          <Square className="clock-button-icon" />
+          <RotateCcw className="clock-button-icon" />
         </button>
       </div>
       {!currentTask ? (
@@ -61,9 +62,10 @@ export default function ClockButtons({
           </button>
         </div>
       ) : (
-        <div style={{ backgroundColor: "black", color: "white" }}>
-          {currentTask.order + currentTask.title + "|" + currentTask.duration}
-        </div>
+        <Pannel
+          title={currentTask.title}
+          description={currentTask.description}
+        />
       )}
     </div>
   );

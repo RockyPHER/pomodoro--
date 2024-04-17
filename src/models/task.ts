@@ -3,5 +3,4 @@ export interface ITask {
     title: string;
     duration: number;
     description?: string;
-    order?: number;
 }

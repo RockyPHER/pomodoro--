@@ -1,7 +1,12 @@
 :root {
-  --background: rgba(120, 120, 120, 1);
-  --background-1: rgba(60, 60, 60, 1);
-  --background-2: rgba(20, 20, 20, 1);
+  --background: rgba(30, 40, 70, 0.4);
+  --background-1: rgba(19, 25, 41, 0.4);
+  --background-2: rgba(69, 78, 109, 0.4);
+
+  --button: rgba(30, 40, 70, 0.3);
+  --button-1: rgba(30, 40, 70, 0.9);
+  --button-2: rgba(19, 25, 41, 0.9);
+  --button-3: rgba(30, 40, 70, 0.2);
 
   --primary: rgba(0, 0, 0, 1);
   --primary-1: rgba(0, 0, 0, 1);
@@ -10,9 +15,9 @@
   --primary-4: rgba(0, 0, 0, 1);
 
   --text: rgba(255, 255, 255, 1);
-  --text-1: rgba(210, 210, 210, 1);
+  --text-1: rgba(240, 240, 240, 0.3);
 
-  --surface: rgba(170, 170, 170, 1);
-  --surface-1: rgba(200, 200, 200, 1);
-  --surface-2: rgba(230, 230, 230, 1);
+  --surface: rgba(140, 150, 160, 0.7);
+  --surface-1: rgba(180, 200, 240, 0.3);
+  --surface-2: rgba(190, 220, 250, 0.2);
 }
