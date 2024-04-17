@@ -38,7 +38,6 @@ export default function Task({
   const [isSelected, setIsSelected] = useState(false);
   const [editDuration, setEditDuration] = useState(false);
   const [editTitle, setEditTitle] = useState(true);
-  const [openTask, setOpenTask] = useState(false);
   const formatedDuration = formatTime(task.duration);
 
   function handleTimeInput(e: ChangeEvent<HTMLInputElement>) {
@@ -120,7 +119,7 @@ export default function Task({
           </div>
         )}
       </div>
-      {openTask && <div className="task-description">{task.description}</div>}
+      {/* {openTask && <div className="task-description">{task.description}</div>} */}
     </div>
   );
 }
