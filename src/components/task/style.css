@@ -53,6 +53,7 @@
   font-size: 1em;
   border-radius: 0.3em;
   cursor: pointer;
+  user-select: none;
 }
 .task-title-input {
   width: 50%;
@@ -70,6 +71,7 @@
   background-color: var(--surface-1);
   border-radius: 0.3em;
   cursor: pointer;
+  user-select: none;
 }
 .task-duration-input {
   width: 3.6em;

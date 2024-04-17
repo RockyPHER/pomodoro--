@@ -34,7 +34,7 @@ export default function BackStack({
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        delay: 150,
+        delay: 80,
         tolerance: 5,
       },
     })

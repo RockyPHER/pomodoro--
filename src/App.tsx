@@ -97,7 +97,6 @@ export default function App() {
       title: "title",
       duration: 0,
       description: "",
-      order: backTasks.length + 1,
     };
     setBackTasks([...backTasks, newTask]);
   }
@@ -117,9 +116,10 @@ export default function App() {
       <Stack
         isRunStack={false}
         tasks={backTasks}
-        setBackTasks={setBackTasks}
         runTasks={runTasks}
         currentTask={currentTask}
+        clearTasks={clearRunTasks}
+        setBackTasks={setBackTasks}
         createTask={createTask}
         updateTask={updateTask}
         deleteTask={deleteTask}
@@ -154,6 +154,7 @@ export default function App() {
         tasks={backTasks}
         runTasks={runTasks}
         currentTask={currentTask}
+        clearTasks={clearRunTasks}
         setBackTasks={setBackTasks}
         createTask={createTask}
         updateTask={updateTask}
