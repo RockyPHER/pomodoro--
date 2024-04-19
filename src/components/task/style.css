@@ -73,9 +73,12 @@
   cursor: pointer;
   user-select: none;
 }
+.task-duration-input-container {
+  display: flex;
+}
 .task-duration-input {
-  width: 3.6em;
-  padding: 0.3em 0.5em;
+  width: 1.7em;
+  padding: 0.1em;
   font-size: 1em;
   background-color: var(--surface-1);
   border: 0.18em solid var(--background-2);

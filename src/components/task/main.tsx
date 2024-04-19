@@ -1,5 +1,5 @@
 import "./style.css";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, FocusEvent, useEffect, useRef, useState } from "react";
 import { formatTime } from "../../scripts/timeFormat";
 import { X } from "lucide-react";
 import { ITask } from "../../models/task";
@@ -40,7 +40,36 @@ export default function Task({
   const [editTitle, setEditTitle] = useState(true);
   const formatedDuration = formatTime(task.duration);
 
-  function handleTimeInput(e: ChangeEvent<HTMLInputElement>) {
+  const durationRef = useRef<HTMLInputElement | null>(null);
+
+  const duration = {
+    sec: 0,
+    min: 0,
+  };
+
+  function handleInputBlur(e: FocusEvent<HTMLDivElement, Element>) {
+    if (
+      !e.relatedTarget ||
+      !e.currentTarget.contains(e.relatedTarget as Node)
+    ) {
+      durationRef.current?.blur();
+      setEditDuration(false);
+    }
+  }
+  const handleSecInput = (e: ChangeEvent<HTMLInputElement>) => {
+    const sec = e.target.value;
+    if (sec.length > 2) return (duration.sec = 59);
+    if (parseInt(sec) < 0) return (duration.sec = 0);
+    return (duration.sec = parseInt(sec));
+  };
+  const handleMinInput = (e: ChangeEvent<HTMLInputElement>) => {
+    const min = e.target.value;
+    if (min.length > 2) return (duration.min = 60);
+    if (parseInt(min) < 0) return (duration.min = 0);
+    return (duration.min = parseInt(min));
+  };
+
+  function setTaskTime(e: ChangeEvent<HTMLInputElement>) {
     setTask({
       ...task,
       duration: parseInt(e.target.value),
@@ -89,16 +118,31 @@ export default function Task({
             </span>
           )}
           {editDuration && !isRunTask ? (
-            <input
-              autoFocus
-              className="task-duration-input"
-              onBlur={() => setEditDuration(false)}
-              onFocus={(e) => e.target.select()}
-              onChange={(e) => handleTimeInput(e)}
-              value={task.duration}
-              type="number"
-              min={0}
-            ></input>
+            <div
+              ref={durationRef}
+              onBlur={(e) => handleInputBlur(e)}
+              className="task-duration-input-container"
+            >
+              <input
+                autoFocus
+                className="task-duration-input"
+                onFocus={(e) => e.target.select()}
+                onChange={(e) => handleMinInput(e)}
+                value={duration.min}
+                type="number"
+                min={0}
+                max={60}
+              ></input>
+              <input
+                className="task-duration-input"
+                onFocus={(e) => e.target.select()}
+                onChange={(e) => handleSecInput(e)}
+                value={duration.sec}
+                type="number"
+                min={0}
+                max={59}
+              ></input>
+            </div>
           ) : (
             <span
               onClick={() => setEditDuration(true)}
