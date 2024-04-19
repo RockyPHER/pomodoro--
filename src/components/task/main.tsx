@@ -43,8 +43,8 @@ export default function Task({
   const durationRef = useRef<HTMLInputElement | null>(null);
 
   const duration = {
-    sec: 0,
-    min: 0,
+    sec: "00",
+    min: "00",
   };
 
   function handleInputBlur(e: FocusEvent<HTMLDivElement, Element>) {
@@ -58,15 +58,15 @@ export default function Task({
   }
   const handleSecInput = (e: ChangeEvent<HTMLInputElement>) => {
     const sec = e.target.value;
-    if (sec.length > 2) return (duration.sec = 59);
-    if (parseInt(sec) < 0) return (duration.sec = 0);
-    return (duration.sec = parseInt(sec));
+    if (sec.length > 2) return (duration.sec = "59");
+    if (parseInt(sec) < 0) return (duration.sec = "00");
+    return (duration.sec = sec.padStart(2, "0"));
   };
   const handleMinInput = (e: ChangeEvent<HTMLInputElement>) => {
     const min = e.target.value;
-    if (min.length > 2) return (duration.min = 60);
-    if (parseInt(min) < 0) return (duration.min = 0);
-    return (duration.min = parseInt(min));
+    if (min.length > 2) return (duration.min = "60");
+    if (parseInt(min) < 0) return (duration.min = "00");
+    return (duration.min = min.padStart(2, "0"));
   };
 
   function setTaskTime(e: ChangeEvent<HTMLInputElement>) {
