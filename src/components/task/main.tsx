@@ -42,8 +42,8 @@ export default function Task({
 
   const durationRef = useRef<HTMLInputElement | null>(null);
 
-  const [min, setMin] = useState<string>();
-  const [sec, setSec] = useState<string>();
+  const [min, setMin] = useState<string>("00");
+  const [sec, setSec] = useState<string>("00");
 
   function handleInputBlur(e: FocusEvent<HTMLDivElement, Element>) {
     if (
@@ -54,6 +54,12 @@ export default function Task({
       setEditDuration(false);
     }
   }
+
+  const setNewTaskDuration = () => {
+    const newDuration = 60 * parseInt(min, 10) + parseInt(sec, 10);
+    setTask({ ...task, duration: newDuration });
+  };
+
   const handleSecInput = (e: ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     if (parseInt(input) > 59) return setSec("59");
@@ -67,26 +73,21 @@ export default function Task({
     if (parseInt(input) < 10) return setMin(input.padStart(2, "0"));
   };
 
-  function setTaskTime(e: ChangeEvent<HTMLInputElement>) {
-    setTask({
-      ...task,
-      duration: parseInt(e.target.value),
-    });
-  }
-
   useEffect(() => {
-    if (!isRunTask && task !== data) {
-      updateTask(task);
-    }
+    // is on back stack
+    // updates data on change
+    if (!isRunTask && task !== data) updateTask(task);
+    // is on run stack
+    // add border to indicate actual task
     if (isRunTask && currentTask) {
-      if (currentTask.id === data.id) {
-        setIsSelected(true);
-      }
-      if (currentTask.id !== data.id) {
-        setIsSelected(false);
-      }
+      if (currentTask.id === data.id) setIsSelected(true);
+      if (currentTask.id !== data.id) setIsSelected(false);
     }
   }, [task, currentTask]);
+
+  useEffect(() => {
+    setNewTaskDuration();
+  }, [sec, min]);
 
   return (
     <div
