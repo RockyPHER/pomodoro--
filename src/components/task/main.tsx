@@ -42,10 +42,8 @@ export default function Task({
 
   const durationRef = useRef<HTMLInputElement | null>(null);
 
-  const duration = {
-    sec: "00",
-    min: "00",
-  };
+  const [min, setMin] = useState<string>();
+  const [sec, setSec] = useState<string>();
 
   function handleInputBlur(e: FocusEvent<HTMLDivElement, Element>) {
     if (
@@ -57,16 +55,16 @@ export default function Task({
     }
   }
   const handleSecInput = (e: ChangeEvent<HTMLInputElement>) => {
-    const sec = e.target.value;
-    if (sec.length > 2) return (duration.sec = "59");
-    if (parseInt(sec) < 0) return (duration.sec = "00");
-    return (duration.sec = sec.padStart(2, "0"));
+    const input = e.target.value;
+    if (parseInt(input) > 59) return setSec("59");
+    if (input.length > 2) return setSec(input.slice(1));
+    if (parseInt(input) < 10) return setSec(input.padStart(2, "0"));
   };
   const handleMinInput = (e: ChangeEvent<HTMLInputElement>) => {
-    const min = e.target.value;
-    if (min.length > 2) return (duration.min = "60");
-    if (parseInt(min) < 0) return (duration.min = "00");
-    return (duration.min = min.padStart(2, "0"));
+    const input = e.target.value;
+    if (parseInt(input) > 60) return setMin("60");
+    if (input.length > 2) return setMin(input.slice(1));
+    if (parseInt(input) < 10) return setMin(input.padStart(2, "0"));
   };
 
   function setTaskTime(e: ChangeEvent<HTMLInputElement>) {
@@ -128,7 +126,7 @@ export default function Task({
                 className="task-duration-input"
                 onFocus={(e) => e.target.select()}
                 onChange={(e) => handleMinInput(e)}
-                value={duration.min}
+                value={min}
                 type="number"
                 min={0}
                 max={60}
@@ -137,7 +135,7 @@ export default function Task({
                 className="task-duration-input"
                 onFocus={(e) => e.target.select()}
                 onChange={(e) => handleSecInput(e)}
-                value={duration.sec}
+                value={sec}
                 type="number"
                 min={0}
                 max={59}
