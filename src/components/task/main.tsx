@@ -41,6 +41,9 @@ export default function Task({
   const formatedDuration = formatTime(task.duration);
 
   const durationRef = useRef<HTMLInputElement | null>(null);
+  const minRef = useRef<HTMLInputElement | null>(null);
+  const secRef = useRef<HTMLInputElement | null>(null);
+  const type = useRef<string | null>(null);
 
   const [min, setMin] = useState<string>("00");
   const [sec, setSec] = useState<string>("00");
@@ -89,6 +92,13 @@ export default function Task({
     setNewTaskDuration();
   }, [sec, min]);
 
+  useEffect(() => {
+    if (editDuration) {
+      if (type.current === "min") return minRef.current?.focus();
+      if (type.current === "sec") return secRef.current?.focus();
+    }
+  }, [editDuration]);
+
   return (
     <div
       style={style}
@@ -102,11 +112,12 @@ export default function Task({
           {editTitle && !isRunTask ? (
             <input
               autoFocus
-              className="task-title-input"
+              className="task-title-input text"
               onBlur={() => setEditTitle(false)}
               onFocus={(e) => e.target.select()}
               onChange={(e) => setTask({ ...task, title: e.target.value })}
               value={task.title}
+              maxLength={17}
             ></input>
           ) : (
             <span
@@ -123,8 +134,8 @@ export default function Task({
               className="task-duration-input-container"
             >
               <input
-                autoFocus
-                className="task-duration-input"
+                ref={minRef}
+                className="task-duration-input text"
                 onFocus={(e) => e.target.select()}
                 onChange={(e) => handleMinInput(e)}
                 value={min}
@@ -132,8 +143,10 @@ export default function Task({
                 min={0}
                 max={60}
               ></input>
+              <p className="duration-dot text">:</p>
               <input
-                className="task-duration-input"
+                ref={secRef}
+                className="task-duration-input text"
                 onFocus={(e) => e.target.select()}
                 onChange={(e) => handleSecInput(e)}
                 value={sec}
@@ -143,11 +156,26 @@ export default function Task({
               ></input>
             </div>
           ) : (
-            <span
-              onClick={() => setEditDuration(true)}
-              className="task-duration-text text"
-            >
-              {formatedDuration[0]}:{formatedDuration[1]}
+            <span className="task-duration-text text">
+              <p
+                onClick={() => {
+                  setEditDuration(true);
+                  type.current = "min";
+                }}
+                className="task-time-text left"
+              >
+                {formatedDuration[0]}
+              </p>
+              :
+              <p
+                onClick={() => {
+                  setEditDuration(true);
+                  type.current = "sec";
+                }}
+                className="task-time-text right"
+              >
+                {formatedDuration[1]}
+              </p>
             </span>
           )}
         </div>
