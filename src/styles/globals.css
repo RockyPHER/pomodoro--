@@ -1,55 +1,175 @@
-@import "./config.css";
-@import "node_modules/modern-normalize/modern-normalize.css";
+@import "tailwindcss";
+/* Tailwind v4's Preflight provides the base reset/normalize. */
 
-:root {
-  background-image: url(https://wallroom.io/img/2560x1440/bg-426b328.jpg);
-  background-size: cover;
+/* ------------------------------------------------------------------ *
+ * Design tokens
+ *
+ * Semantic tokens live as CSS custom properties scoped to a
+ * [data-theme] attribute on <html>. This is the single place colors
+ * and surfaces are defined, so future reskins ("warm-cafe",
+ * "minimal-light", "performance-sport") only need to add another
+ * [data-theme] block — no component touches a raw color.
+ * ------------------------------------------------------------------ */
+@layer base {
+  :root,
+  [data-theme="cozy-rain"] {
+    /* Backgrounds */
+    --background: #08101c;
+    --background-2: #0c1625;
+
+    /* Glass surfaces */
+    --surface: rgba(18, 29, 45, 0.52);
+    --surface-elevated: rgba(23, 35, 53, 0.68);
+    --surface-hover: rgba(32, 45, 66, 0.72);
+
+    /* Borders */
+    --border: rgba(255, 255, 255, 0.1);
+    --border-strong: rgba(255, 255, 255, 0.17);
+
+    /* Text */
+    --fg: #f2f4f8;
+    --fg-soft: rgba(242, 244, 248, 0.68);
+    --fg-muted: rgba(242, 244, 248, 0.42);
+
+    /* Accent */
+    --accent: #a99cf4;
+    --accent-soft: #8ebdf7;
+    --accent-dim: rgba(169, 156, 244, 0.16);
+    --accent-glow: rgba(169, 156, 244, 0.35);
+
+    /* States */
+    --pause: #e7c08a;
+    --pause-dim: rgba(231, 192, 138, 0.16);
+    --danger: #e48787;
+    --success: #9dcfb5;
+
+    /* Effects */
+    --shadow-panel: 0 20px 60px rgba(0, 0, 0, 0.22);
+    --blur-panel: 18px;
+  }
 }
 
-.text {
-  font-family: "Ubuntu", sans-serif;
-  font-optical-sizing: auto;
-  font-style: normal;
-  color: var(--text);
+/* Map semantic tokens into Tailwind's theme so utilities like
+ * `bg-surface`, `text-fg`, `border-border-strong` resolve to the
+ * custom properties above and stay theme-swappable at runtime. */
+@theme {
+  --color-background: var(--background);
+  --color-background-2: var(--background-2);
+
+  --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
+  --color-surface-hover: var(--surface-hover);
+
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-fg: var(--fg);
+  --color-fg-soft: var(--fg-soft);
+  --color-fg-muted: var(--fg-muted);
+
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-dim: var(--accent-dim);
+  --color-accent-glow: var(--accent-glow);
+
+  --color-pause: var(--pause);
+  --color-pause-dim: var(--pause-dim);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
 }
 
-main {
-  width: 100vw;
-  height: 100vh;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    overflow: hidden;
+    background-color: var(--background);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-optical-sizing: auto;
+  }
+
+  /* Visible, calm keyboard focus everywhere */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Remove number input spinners */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+
+  /* Thin, quiet scrollbar */
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 2px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--fg-muted);
+  }
+
+  kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85em;
+    font-family: var(--font-sans);
+    padding: 1px 5px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-strong);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    line-height: 1.4;
+    color: var(--fg);
+  }
 }
 
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+@layer utilities {
+  /* Glass panel surface — used by side panels, topbar, drawers */
+  .glass {
+    background: var(--surface);
+    backdrop-filter: blur(var(--blur-panel));
+    -webkit-backdrop-filter: blur(var(--blur-panel));
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-panel);
+  }
 }
 
-/* Firefox */
-input[type="number"] {
-  -moz-appearance: textfield;
-}
-
-/* width */
-::-webkit-scrollbar {
-  width: 0.3em;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: var(--background);
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: var(--surface);
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text);
+/* Calm, functional motion only — honor the user's reduced-motion choice */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
