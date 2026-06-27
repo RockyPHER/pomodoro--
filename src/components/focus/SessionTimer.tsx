@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { formatTime } from "../../scripts/timeFormat";
 import { SessionStatus } from "../../lib/sessionStatus";
+import { playTimerEndSound } from "../../lib/sounds";
 import SessionProgress from "./SessionProgress";
 
 interface SessionTimerProps {
@@ -43,6 +44,7 @@ export default function SessionTimer({
         return;
       }
       if (time <= 0) {
+        playTimerEndSound();
         setIsPlay(false);
         setIsReset(true);
         onTaskConclude();
