@@ -25,6 +25,8 @@ import PlanPanel from "./components/plan/PlanPanel";
 import QueuePanel from "./components/queue/QueuePanel";
 import CompletedPanel from "./components/completed/CompletedPanel";
 import FocusStage from "./components/focus/FocusStage";
+import SpotifyMiniPlayer from "./components/spotify/SpotifyMiniPlayer";
+import SpotifyModal from "./components/spotify/SpotifyModal";
 
 const isWide = () =>
   typeof window !== "undefined" && window.innerWidth >= 1024;
@@ -35,6 +37,7 @@ export default function App() {
 
   const [planOpen, setPlanOpen] = useState(isWide);
   const [queueOpen, setQueueOpen] = useState(isWide);
+  const [spotifyOpen, setSpotifyOpen] = useState(false);
   const [newTaskId, setNewTaskId] = useState<number | null>(null);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [activeDragId, setActiveDragId] = useState<number | null>(null);
@@ -212,8 +215,10 @@ export default function App() {
         <Topbar
           planOpen={planOpen}
           queueOpen={queueOpen}
+          spotifyOpen={spotifyOpen}
           onTogglePlan={() => setPlanOpen((o) => !o)}
           onToggleQueue={() => setQueueOpen((o) => !o)}
+          onToggleSpotify={() => setSpotifyOpen((o) => !o)}
           onOpenShortcuts={() => setShortcutsOpen(true)}
         />
 
@@ -305,6 +310,16 @@ export default function App() {
       <ShortcutsDialog
         open={shortcutsOpen}
         onClose={() => setShortcutsOpen(false)}
+      />
+
+      <SpotifyMiniPlayer
+        isOpen={spotifyOpen}
+        onToggle={() => setSpotifyOpen((o) => !o)}
+      />
+
+      <SpotifyModal
+        isOpen={spotifyOpen}
+        onClose={() => setSpotifyOpen(false)}
       />
 
       {/* DragOverlay renders in a portal at the root — never clipped by overflow containers */}

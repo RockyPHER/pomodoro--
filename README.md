@@ -95,6 +95,36 @@ npm run build
 - **Animações**: Motion (Framer Motion)
 - **Drag & Drop**: dnd-kit
 - **Icons**: Lucide React
+- **Spotify Integration**: Spotify Web Playback SDK
+
+---
+
+## 🎵 Integração com Spotify (Novo!)
+
+Ouça música enquanto trabalha! A integração com Spotify permite que você:
+
+- **Autentique-se** com sua conta Spotify Premium
+- **Controle a música** diretamente no app (play, pause, próxima, anterior, volume)
+- **Selecione playlists** da sua biblioteca
+- **Veja o que está tocando** em um mini-player no canto da tela
+
+### Configurar Spotify
+
+1. **Crie uma Developer App** em [developer.spotify.com](https://developer.spotify.com/dashboard)
+2. **Copie seu Client ID** das configurações da app
+3. **Adicione o Redirect URI**: `http://localhost:5173/`
+4. **Configure a variável de ambiente**:
+   ```bash
+   # Copie .env.example para .env.local
+   cp .env.example .env.local
+   
+   # Edite .env.local e adicione seu Client ID
+   VITE_SPOTIFY_CLIENT_ID=seu_client_id_aqui
+   ```
+5. **Inicie o dev server**: `npm run dev`
+6. **Clique no ícone Spotify** na Topbar para conectar sua conta
+
+**Requisitos**: Você precisa ter uma **conta Spotify Premium** para usar a reprodução de música no app.
 
 ---
 

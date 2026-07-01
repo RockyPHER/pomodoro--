@@ -1,20 +1,25 @@
 import { Keyboard, Menu, Moon, PanelRight } from "lucide-react";
+import { SiSpotify } from "react-icons/si";
 import IconButton from "./IconButton";
 import { useTheme } from "../../theme/context";
 
 interface TopbarProps {
   planOpen: boolean;
   queueOpen: boolean;
+  spotifyOpen: boolean;
   onTogglePlan: () => void;
   onToggleQueue: () => void;
+  onToggleSpotify: () => void;
   onOpenShortcuts: () => void;
 }
 
 export default function Topbar({
   planOpen,
   queueOpen,
+  spotifyOpen,
   onTogglePlan,
   onToggleQueue,
+  onToggleSpotify,
   onOpenShortcuts,
 }: TopbarProps) {
   const { cycleTheme } = useTheme();
@@ -40,6 +45,13 @@ export default function Topbar({
         </IconButton>
         <IconButton label="Keyboard shortcuts" onClick={onOpenShortcuts}>
           <Keyboard className="h-[1.15rem] w-[1.15rem]" />
+        </IconButton>
+        <IconButton
+          label={spotifyOpen ? "Hide Spotify" : "Show Spotify"}
+          active={spotifyOpen}
+          onClick={onToggleSpotify}
+        >
+          <SiSpotify className="h-[1.15rem] w-[1.15rem]" />
         </IconButton>
         <IconButton
           label={queueOpen ? "Hide queue" : "Show queue"}
