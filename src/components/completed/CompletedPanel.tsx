@@ -14,8 +14,8 @@ export default function CompletedPanel({ completedTasks, onClear }: CompletedPan
   const count = completedTasks.length;
 
   return (
-    <section className="glass overflow-hidden rounded-2xl">
-      <div className="flex items-center justify-between px-4 py-3">
+    <section className="glass overflow-hidden rounded-lg">
+      <div className="flex items-center justify-between px-5 py-4">
         <button
           onClick={() => count > 0 && setOpen((o) => !o)}
           aria-expanded={open}
@@ -50,7 +50,7 @@ export default function CompletedPanel({ completedTasks, onClear }: CompletedPan
       </div>
 
       {count > 0 && !open && (
-        <div className="flex flex-wrap gap-1.5 px-4 pb-3">
+        <div className="flex flex-wrap gap-1.5 px-5 pb-4">
           {completedTasks.map((t) => (
             <span
               key={t.id}
@@ -68,12 +68,12 @@ export default function CompletedPanel({ completedTasks, onClear }: CompletedPan
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.22, ease: "easeOut" }}
-            className="overflow-hidden border-t border-border"
+            className="overflow-hidden pt-1"
           >
             {completedTasks.map((t) => (
               <li
                 key={t.id}
-                className="flex items-center gap-2 px-4 py-2 text-sm text-fg-soft"
+                className="flex items-center gap-2 px-5 py-2 text-sm text-fg-soft"
               >
                 <Check className="h-3.5 w-3.5 shrink-0 text-success" />
                 <span className="truncate">{t.title || "Untitled"}</span>

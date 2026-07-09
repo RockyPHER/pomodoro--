@@ -1,7 +1,9 @@
-import { useSpotifyAuth } from '../../hooks/useSpotifyAuth';
+import { useSpotifyAuth } from '../../contexts/SpotifyAuthContext';
 import { useSpotifyApi } from '../../hooks/useSpotifyApi';
 import { useEffect, useState } from 'react';
 import { LogOut } from 'lucide-react';
+import { motion } from 'motion/react';
+import SpotifyLogo from './SpotifyLogo';
 
 interface SpotifyLoginProps {
   onClose?: () => void;
@@ -20,43 +22,55 @@ export default function SpotifyLogin({ onClose }: SpotifyLoginProps) {
 
   if (!auth.isAuthenticated) {
     return (
-      <div className="flex flex-col items-center gap-4 rounded-lg border border-border bg-white/3 p-6">
-        <div className="text-3xl">🎵</div>
-        <div className="text-center">
-          <h3 className="font-medium text-fg">Connect Spotify</h3>
-          <p className="text-xs text-fg-muted">Play music while you focus</p>
+      <div className="flex flex-col items-center gap-4 rounded-2xl bg-white/4 px-6 py-8 text-center">
+        <SpotifyLogo className="h-8 w-8" />
+        <div>
+          <h3 className="text-base font-semibold text-fg">Connect Spotify</h3>
+          <p className="mt-1 text-xs text-fg-muted">Play music while you focus</p>
         </div>
-        <button
+        <motion.button
           onClick={auth.login}
-          className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#1DB954] px-4 py-2.5 font-medium text-[#0c1020] transition-all hover:bg-[#1ed760] active:scale-95"
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 22 }}
+          className="rounded-full bg-[#1DB954] px-5 py-2.5 text-sm font-medium text-[#04150a] shadow-[0_8px_20px_rgba(29,185,84,0.3)]"
         >
           Login with Spotify
-        </button>
+        </motion.button>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center justify-between rounded-lg border border-border bg-white/3 p-4">
-      <div className="flex items-center gap-3">
-        {user?.images?.[0]?.url && (
-          <img src={user.images[0].url} alt={user.display_name} className="h-10 w-10 rounded-full" />
+    <div className="flex items-center justify-between gap-3 rounded-2xl bg-white/4 px-4 py-3">
+      <div className="flex min-w-0 items-center gap-3">
+        {user?.images?.[0]?.url ? (
+          <img src={user.images[0].url} alt={user.display_name} className="h-10 w-10 shrink-0 rounded-full" />
+        ) : (
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/6 text-sm font-medium text-fg-soft">
+            {user?.display_name?.[0]?.toUpperCase() || '?'}
+          </div>
         )}
-        <div>
-          <p className="text-sm font-medium text-fg">{user?.display_name || 'Spotify User'}</p>
-          <p className="text-xs text-fg-muted">Premium Account</p>
+        <div className="min-w-0">
+          <p className="truncate text-sm font-medium text-fg">{user?.display_name || 'Spotify User'}</p>
+          <span className="mt-0.5 inline-flex items-center rounded-full bg-[#1DB954]/15 px-2 py-0.5 text-[0.65rem] font-medium tracking-wide text-[#1DB954]">
+            Premium
+          </span>
         </div>
       </div>
-      <button
+      <motion.button
         onClick={() => {
           auth.logout();
           onClose?.();
         }}
-        className="flex h-8 w-8 items-center justify-center rounded-full border border-border/50 text-fg-muted transition-colors hover:border-danger/40 hover:bg-danger/10 hover:text-danger"
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.92 }}
+        transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-fg-muted transition-colors hover:bg-danger/10 hover:text-danger"
         aria-label="Logout"
       >
         <LogOut className="h-4 w-4" />
-      </button>
+      </motion.button>
     </div>
   );
 }

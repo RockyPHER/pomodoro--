@@ -222,7 +222,7 @@ export default function App() {
           onOpenShortcuts={() => setShortcutsOpen(true)}
         />
 
-        <main className="relative flex flex-1 overflow-hidden">
+        <main className="relative mx-auto flex w-full max-w-[1600px] flex-1 overflow-hidden lg:px-8">
           {/* Backdrop for mobile drawers */}
           {(planOpen || queueOpen) && (
             <div
@@ -282,11 +282,13 @@ export default function App() {
             onAddFirstTask={handleCreateTask}
           />
 
-          {/* Queue + Completed (right) */}
+          {/* Queue + Completed + Spotify (right) — same wrapper so every
+              card in this column shares one horizontal width, with the
+              Spotify mini player pinned to the bottom. */}
           <div
             className={cn(
               "z-30 flex shrink-0 flex-col gap-3 transition-all duration-300 ease-out",
-              "fixed bottom-0 right-0 top-14 w-[86%] max-w-[340px] overflow-y-auto p-3",
+              "fixed bottom-0 right-0 top-14 w-[86%] max-w-[340px] p-3",
               "lg:static lg:inset-auto lg:w-[320px] lg:p-4 lg:pl-2",
               running &&
                 "lg:opacity-50 lg:hover:opacity-100 lg:focus-within:opacity-100",
@@ -295,14 +297,21 @@ export default function App() {
                 : "translate-x-[110%] lg:hidden lg:translate-x-0",
             )}
           >
-            <QueuePanel
-              runTasks={tasks.runTasks}
-              currentTask={tasks.currentTask}
-              clearTasks={tasks.clearTasks}
-              onCollapse={() => setQueueOpen(false)}
-              onSelectTask={handleSelectTask}
+            <div className="flex flex-1 flex-col gap-3 overflow-y-auto">
+              <QueuePanel
+                runTasks={tasks.runTasks}
+                currentTask={tasks.currentTask}
+                clearTasks={tasks.clearTasks}
+                onCollapse={() => setQueueOpen(false)}
+                onSelectTask={handleSelectTask}
+              />
+              <CompletedPanel completedTasks={tasks.completedTasks} onClear={tasks.clearCompleted} />
+            </div>
+
+            <SpotifyMiniPlayer
+              isOpen={spotifyOpen}
+              onToggle={() => setSpotifyOpen((o) => !o)}
             />
-            <CompletedPanel completedTasks={tasks.completedTasks} onClear={tasks.clearCompleted} />
           </div>
         </main>
       </div>
@@ -310,11 +319,6 @@ export default function App() {
       <ShortcutsDialog
         open={shortcutsOpen}
         onClose={() => setShortcutsOpen(false)}
-      />
-
-      <SpotifyMiniPlayer
-        isOpen={spotifyOpen}
-        onToggle={() => setSpotifyOpen((o) => !o)}
       />
 
       <SpotifyModal

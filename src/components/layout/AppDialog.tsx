@@ -2,12 +2,23 @@ import { useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import IconButton from "./IconButton";
+import { cn } from "../../lib/cn";
 
 interface AppDialogProps {
   open: boolean;
   title: string;
   onClose: () => void;
   children: React.ReactNode;
+  /** Tailwind max-width class for the panel. Defaults to a compact dialog. */
+  maxWidthClassName?: string;
+  /** Optional icon rendered to the left of the title. */
+  titleIcon?: React.ReactNode;
+  /** Skip the built-in title/close header row — the caller owns its own header/close affordance. `title` is still used for the a11y label. */
+  hideHeader?: boolean;
+  /** Extra classes for the panel itself (background, padding, height…). Later utilities win over the defaults. */
+  panelClassName?: string;
+  /** Skip the default `.glass` surface so panelClassName can fully own the background/shadow. */
+  disableGlass?: boolean;
 }
 
 /**
@@ -19,6 +30,11 @@ export default function AppDialog({
   title,
   onClose,
   children,
+  maxWidthClassName = "max-w-sm",
+  titleIcon,
+  hideHeader = false,
+  panelClassName,
+  disableGlass = false,
 }: AppDialogProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<Element | null>(null);
@@ -84,16 +100,24 @@ export default function AppDialog({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.98 }}
             transition={{ duration: 0.22, ease: "easeOut" }}
-            className="glass relative z-10 w-full max-w-sm rounded-2xl p-5 outline-none"
+            className={cn(
+              !disableGlass && "glass",
+              "relative z-10 max-h-[88vh] w-full overflow-y-auto rounded-lg p-6 outline-none",
+              maxWidthClassName,
+              panelClassName,
+            )}
           >
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-sm font-semibold tracking-wide text-fg">
-                {title}
-              </h2>
-              <IconButton label="Close" onClick={onClose} className="h-8 w-8">
-                <X className="h-4 w-4" />
-              </IconButton>
-            </div>
+            {!hideHeader && (
+              <div className="mb-5 flex items-center justify-between">
+                <h2 className="flex items-center gap-2 text-sm font-semibold tracking-wide text-fg">
+                  {titleIcon}
+                  {title}
+                </h2>
+                <IconButton label="Close" onClick={onClose} className="h-8 w-8">
+                  <X className="h-4 w-4" />
+                </IconButton>
+              </div>
+            )}
             {children}
           </motion.div>
         </motion.div>

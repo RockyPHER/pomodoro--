@@ -125,7 +125,7 @@ export default function Task({
     <div
       ref={durationRef}
       onBlur={handleDurationBlur}
-      className={cn(durationBadge, "border border-accent bg-white/[0.06]")}
+      className={cn(durationBadge, "border border-accent bg-white/6")}
     >
       <input
         ref={minRef}
@@ -159,10 +159,10 @@ export default function Task({
   if (isNew) {
     return (
       <div ref={containerRef} className="w-full" onBlur={handleContainerBlur}>
-        <div className="flex w-full items-center gap-2 rounded-lg border border-accent bg-accent-dim px-2.5 py-2">
+        <div className="flex w-full items-center gap-2 rounded-md border border-accent bg-accent-dim px-2.5 py-2">
           <input
             autoFocus
-            className="min-w-0 flex-1 rounded border border-accent bg-white/[0.06] px-2 py-1 text-sm font-medium text-fg outline-none placeholder:italic placeholder:text-fg-muted"
+            className="min-w-0 flex-1 rounded border border-accent bg-white/6 px-2 py-1 text-sm font-medium text-fg outline-none placeholder:italic placeholder:text-fg-muted"
             placeholder="Task name"
             value={task.title}
             onChange={(e) => setTask({ ...task, title: e.target.value })}
@@ -185,10 +185,8 @@ export default function Task({
       style={style}
       {...attributes}
       className={cn(
-        "group/task flex w-full items-center gap-1.5 rounded-lg border px-1.5 py-1.5 transition-colors duration-150 ease-out",
-        isDragging
-          ? "border-border bg-white/[0.03] opacity-0"
-          : "border-border bg-white/[0.03] hover:border-border-strong hover:bg-white/[0.055]",
+        "group/task flex w-full items-center gap-1.5 rounded-md px-1.5 py-1.5 transition-colors duration-150 ease-out",
+        isDragging ? "bg-white/3 opacity-0" : "bg-white/3 hover:bg-white/6",
       )}
     >
       <button
@@ -203,7 +201,7 @@ export default function Task({
         {editTitle ? (
           <input
             autoFocus
-            className="min-w-0 flex-1 rounded border border-accent bg-white/[0.07] px-1.5 py-0.5 text-sm font-medium text-fg outline-none"
+            className="min-w-0 flex-1 rounded border border-accent bg-white/7 px-1.5 py-0.5 text-sm font-medium text-fg outline-none"
             onBlur={() => setEditTitle(false)}
             onFocus={(e) => e.target.select()}
             onChange={(e) => setTask({ ...task, title: e.target.value })}
@@ -212,7 +210,7 @@ export default function Task({
           />
         ) : (
           <span
-            className="min-w-0 flex-1 cursor-text truncate rounded border border-transparent px-1.5 py-0.5 text-sm font-medium text-fg transition-colors duration-150 hover:bg-white/[0.06]"
+            className="min-w-0 flex-1 cursor-text truncate rounded px-1.5 py-0.5 text-sm font-medium text-fg transition-colors duration-150 hover:bg-white/6"
             onClick={() => setEditTitle(true)}
           >
             {task.title || <span className="italic text-fg-muted">Unnamed</span>}
@@ -223,17 +221,14 @@ export default function Task({
           durationInputs
         ) : (
           <span
-            className={cn(
-              durationBadge,
-              "cursor-pointer border border-border bg-white/[0.05] text-fg transition-colors duration-150 hover:border-border-strong",
-            )}
+            className={cn(durationBadge, "cursor-pointer bg-white/5 text-fg transition-colors duration-150")}
           >
             <span
               onClick={() => {
                 setEditDuration(true);
                 setFocusField("min");
               }}
-              className="px-1 py-0.5 transition-colors hover:bg-white/[0.09]"
+              className="px-1 py-0.5 transition-colors hover:bg-white/9"
             >
               {mm}
             </span>
@@ -243,7 +238,7 @@ export default function Task({
                 setEditDuration(true);
                 setFocusField("sec");
               }}
-              className="px-1 py-0.5 transition-colors hover:bg-white/[0.09]"
+              className="px-1 py-0.5 transition-colors hover:bg-white/9"
             >
               {ss}
             </span>
@@ -252,7 +247,7 @@ export default function Task({
       </div>
 
       <button
-        className="cursor-pointer group/close flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-transparent text-fg-muted opacity-0 transition-all duration-150 hover:border-danger/40 hover:bg-danger/[0.14] active:scale-[0.88] focus-visible:opacity-100 group-hover/task:opacity-100"
+        className="cursor-pointer group/close flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-fg-muted opacity-0 transition-all duration-150 hover:bg-danger/14 active:scale-[0.88] focus-visible:opacity-100 group-hover/task:opacity-100"
         onClick={() => deleteTask(task)}
         aria-label={`Delete ${task.title || "task"}`}
       >

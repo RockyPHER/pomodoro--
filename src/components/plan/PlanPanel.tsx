@@ -5,6 +5,7 @@ import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
 import { AnimatePresence, motion } from "motion/react";
 import { formatTotal } from "../../lib/formatDuration";
 import IconButton from "../layout/IconButton";
+import Button from "../layout/Button";
 
 interface PlanPanelProps {
   backTasks: ITask[];
@@ -26,8 +27,8 @@ export default function PlanPanel({
   onCollapse,
 }: PlanPanelProps) {
   return (
-    <aside className="glass flex h-full w-full flex-col overflow-hidden rounded-2xl">
-      <header className="flex shrink-0 items-center justify-between border-b border-border px-4 py-3">
+    <aside className="glass flex h-full w-full flex-col overflow-hidden rounded-lg">
+      <header className="flex shrink-0 items-center justify-between px-5 pt-4 pb-3">
         <div className="flex flex-col">
           <h2 className="text-sm font-semibold text-fg">Plan</h2>
           <p className="text-xs text-fg-muted">
@@ -40,7 +41,7 @@ export default function PlanPanel({
         </IconButton>
       </header>
 
-      <div className="flex flex-1 flex-col gap-2 overflow-y-auto overflow-x-hidden p-2.5">
+      <div className="flex flex-1 flex-col gap-2 overflow-y-auto overflow-x-hidden p-3">
         {backTasks.length > 0 && (
           <div className="flex flex-col gap-1.5 pr-0.5">
             <SortableContext
@@ -70,13 +71,10 @@ export default function PlanPanel({
           </div>
         )}
 
-        <button
-          onClick={onCreate}
-          className="cursor-pointer flex w-full shrink-0 items-center gap-1.5 rounded-lg border border-dashed border-border px-3 py-2.5 text-fg-muted transition-all duration-150 ease-out hover:border-border-strong hover:bg-white/[0.05] hover:text-fg active:scale-[0.98]"
-        >
+        <Button variant="secondary" onClick={onCreate} className="w-full shrink-0 rounded-md py-2.5">
           <Plus className="h-[1.1em] w-[1.1em] shrink-0" />
           <span className="text-sm font-medium">Add task</span>
-        </button>
+        </Button>
       </div>
     </aside>
   );

@@ -5,6 +5,7 @@ import CurrentTask from "./CurrentTask";
 import SessionTimer from "./SessionTimer";
 import SessionControls from "./SessionControls";
 import NextTaskPreview from "./NextTaskPreview";
+import Button from "../layout/Button";
 
 interface FocusStageProps {
   status: SessionStatus;
@@ -39,19 +40,16 @@ export default function FocusStage(props: FocusStageProps) {
   if (status === "idle" && !hasAnyTasks) {
     return (
       <section className="flex flex-1 flex-col items-center justify-center px-6 text-center">
-        <h1 className="text-2xl font-normal text-fg">
+        <h1 className="text-3xl font-normal text-fg sm:text-4xl">
           Plan your first focus session
         </h1>
-        <p className="mt-2 max-w-sm text-sm text-fg-soft">
+        <p className="mt-3 max-w-sm text-sm text-fg-soft">
           Add a task, choose a duration and begin when you are ready.
         </p>
-        <button
-          onClick={props.onAddFirstTask}
-          className="mt-6 flex items-center gap-2 rounded-full bg-gradient-to-b from-accent to-accent-soft px-5 py-3 text-sm font-medium text-[#0c1020] shadow-[0_6px_24px_var(--accent-glow)] transition-transform duration-150 ease-out hover:scale-[1.03] active:scale-[0.97]"
-        >
+        <Button onClick={props.onAddFirstTask} className="mt-6 rounded-full px-5 py-3">
           <Plus className="h-4 w-4" />
           Add your first task
-        </button>
+        </Button>
       </section>
     );
   }

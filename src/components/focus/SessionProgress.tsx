@@ -23,7 +23,7 @@ export default function SessionProgress({
       aria-valuemin={0}
       aria-valuemax={totalDuration}
       aria-valuenow={Math.round(elapsed)}
-      className="h-1 w-full max-w-[26rem] overflow-hidden rounded-full bg-white/[0.07]"
+      className="h-1 w-full max-w-104 overflow-hidden rounded-full bg-white/7"
     >
       <div
         className={cn(

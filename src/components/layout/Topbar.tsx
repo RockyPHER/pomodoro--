@@ -25,8 +25,8 @@ export default function Topbar({
   const { cycleTheme } = useTheme();
 
   return (
-    <header className="glass z-20 flex h-14 shrink-0 items-center justify-between rounded-none border-x-0 border-t-0 px-3 sm:px-4">
-      <div className="flex items-center gap-1 sm:gap-2">
+    <header className="glass z-20 flex h-14 shrink-0 items-center justify-between rounded-none px-4 sm:px-6">
+      <div className="flex items-center gap-2 sm:gap-3">
         <IconButton
           label={planOpen ? "Hide plan" : "Show plan"}
           active={planOpen}
@@ -39,7 +39,7 @@ export default function Topbar({
         </span>
       </div>
 
-      <div className="flex items-center gap-1 sm:gap-2">
+      <div className="flex items-center gap-2 sm:gap-3">
         <IconButton label="Change theme" onClick={cycleTheme}>
           <Moon className="h-[1.15rem] w-[1.15rem]" />
         </IconButton>

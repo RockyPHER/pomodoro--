@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 import {
   getStoredTokens,
   saveTokens,
@@ -8,7 +8,7 @@ import {
   getAuthorizationUrl,
 } from '../lib/spotify';
 
-interface UseSpotifyAuthState {
+interface SpotifyAuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
@@ -16,8 +16,16 @@ interface UseSpotifyAuthState {
   refreshToken: string | null;
 }
 
-export function useSpotifyAuth() {
-  const [state, setState] = useState<UseSpotifyAuthState>({
+type SpotifyAuthContextValue = Omit<SpotifyAuthState, 'refreshToken'> & {
+  login: () => void;
+  logout: () => void;
+  refreshToken: () => Promise<string>;
+};
+
+const SpotifyAuthContext = createContext<SpotifyAuthContextValue | null>(null);
+
+export function SpotifyAuthProvider({ children }: { children: ReactNode }) {
+  const [state, setState] = useState<SpotifyAuthState>({
     isAuthenticated: false,
     isLoading: true,
     error: null,
@@ -25,7 +33,11 @@ export function useSpotifyAuth() {
     refreshToken: null,
   });
 
-  // Check for callback on mount
+  // Check for callback on mount. This provider is mounted once for the
+  // whole app, so the auth code (single-use) only ever gets exchanged once
+  // — previously every component calling this hook ran its own copy of
+  // this effect and raced to exchange the same code, causing a 400 from
+  // Spotify on all but the first request.
   useEffect(() => {
     const handleCallback = async () => {
       const params = new URLSearchParams(window.location.search);
@@ -54,13 +66,13 @@ export function useSpotifyAuth() {
             error: null,
             isLoading: false,
           }));
-          window.history.replaceState({}, '', '/');
         } catch (err) {
           setState((prev) => ({
             ...prev,
             error: err instanceof Error ? err.message : 'Unknown error',
             isLoading: false,
           }));
+        } finally {
           window.history.replaceState({}, '', '/');
         }
         return;
@@ -87,8 +99,8 @@ export function useSpotifyAuth() {
     handleCallback();
   }, []);
 
-  const login = useCallback(() => {
-    window.location.href = getAuthorizationUrl();
+  const login = useCallback(async () => {
+    window.location.href = await getAuthorizationUrl();
   }, []);
 
   const logout = useCallback(() => {
@@ -102,7 +114,7 @@ export function useSpotifyAuth() {
     });
   }, []);
 
-  const refreshToken = useCallback(async () => {
+  const refreshTokenFn = useCallback(async () => {
     if (!state.refreshToken) {
       throw new Error('No refresh token available');
     }
@@ -127,10 +139,17 @@ export function useSpotifyAuth() {
     }
   }, [state.refreshToken]);
 
-  return {
-    ...state,
-    login,
-    logout,
-    refreshToken,
-  };
+  return (
+    <SpotifyAuthContext.Provider value={{ ...state, login, logout, refreshToken: refreshTokenFn }}>
+      {children}
+    </SpotifyAuthContext.Provider>
+  );
+}
+
+export function useSpotifyAuth() {
+  const ctx = useContext(SpotifyAuthContext);
+  if (!ctx) {
+    throw new Error('useSpotifyAuth must be used within a SpotifyAuthProvider');
+  }
+  return ctx;
 }

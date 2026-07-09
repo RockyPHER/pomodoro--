@@ -1,22 +1,48 @@
 import { useEffect, useState, useCallback } from 'react';
 
-interface SpotifyPlayerState {
-  current_track?: {
-    album: { images: Array<{ url: string }> };
-    name: string;
-    artists: Array<{ name: string }>;
+interface SpotifyTrack {
+  id: string;
+  album: { images: Array<{ url: string }> };
+  name: string;
+  artists: Array<{ name: string }>;
+}
+
+// Shape of the object the Web Playback SDK actually passes to the
+// 'player_state_changed' listener (Spotify.PlaybackState). Note the track
+// lives under track_window.current_track, and playback state uses
+// paused/position/duration — not is_playing/progress_ms/duration_ms.
+interface SpotifyPlaybackState {
+  paused: boolean;
+  position: number;
+  duration: number;
+  shuffle: boolean;
+  repeat_mode: 0 | 1 | 2;
+  context: { uri: string | null };
+  track_window: {
+    current_track: SpotifyTrack;
   };
+}
+
+interface SpotifyPlayerState {
+  current_track?: SpotifyTrack;
   is_playing: boolean;
   progress_ms: number;
   duration_ms: number;
 }
+
+type RepeatMode = 'off' | 'context' | 'track';
 
 interface UseSpotifyPlayerState {
   playerState: SpotifyPlayerState | null;
   deviceId: string | null;
   isReady: boolean;
   isPlaying: boolean;
+  shuffle: boolean;
+  repeatMode: RepeatMode;
+  contextUri: string | null;
 }
+
+const REPEAT_MODES: RepeatMode[] = ['off', 'context', 'track'];
 
 declare global {
   interface Window {
@@ -30,12 +56,13 @@ declare global {
         addListener: (event: string, callback: (state: unknown) => void) => void;
         connect: () => Promise<boolean>;
         disconnect: () => void;
-        getCurrentState: () => Promise<SpotifyPlayerState | null>;
+        getCurrentState: () => Promise<SpotifyPlaybackState | null>;
         setVolume: (volume: number) => Promise<void>;
         pause: () => Promise<void>;
         resume: () => Promise<void>;
         nextTrack: () => Promise<void>;
         previousTrack: () => Promise<void>;
+        seek: (positionMs: number) => Promise<void>;
       };
     };
   }
@@ -47,6 +74,9 @@ export function useSpotifyPlayer(accessToken: string | null) {
     deviceId: null,
     isReady: false,
     isPlaying: false,
+    shuffle: false,
+    repeatMode: 'off',
+    contextUri: null,
   });
 
   const [player, setPlayer] = useState<any>(null);
@@ -90,13 +120,21 @@ export function useSpotifyPlayer(accessToken: string | null) {
       let deviceId = '';
 
       player.addListener('player_state_changed', (state: unknown) => {
-        const playerState = state as SpotifyPlayerState | null;
-        if (playerState) {
+        const raw = state as SpotifyPlaybackState | null;
+        if (raw) {
           setState({
-            playerState,
+            playerState: {
+              current_track: raw.track_window.current_track,
+              is_playing: !raw.paused,
+              progress_ms: raw.position,
+              duration_ms: raw.duration,
+            },
             deviceId,
             isReady: true,
-            isPlaying: playerState.is_playing,
+            isPlaying: !raw.paused,
+            shuffle: raw.shuffle,
+            repeatMode: REPEAT_MODES[raw.repeat_mode] ?? 'off',
+            contextUri: raw.context?.uri ?? null,
           });
         }
       });
@@ -182,13 +220,39 @@ export function useSpotifyPlayer(accessToken: string | null) {
     }
   }, [player]);
 
+  const seek = useCallback(async (positionMs: number) => {
+    if (player) {
+      await player.seek(positionMs);
+    }
+  }, [player]);
+
+  // Smoothly advance the reported progress between the SDK's state events,
+  // which only fire on play/pause/seek/track changes — not every second.
+  const [progress, setProgress] = useState(0);
+  const duration = state.playerState?.duration_ms ?? 0;
+
+  useEffect(() => {
+    setProgress(state.playerState?.progress_ms ?? 0);
+  }, [state.playerState?.progress_ms, state.playerState?.current_track?.name]);
+
+  useEffect(() => {
+    if (!state.isPlaying || !duration) return;
+    const id = setInterval(() => {
+      setProgress((p) => Math.min(p + 1000, duration));
+    }, 1000);
+    return () => clearInterval(id);
+  }, [state.isPlaying, duration]);
+
   return {
     ...state,
     player,
+    progress,
+    duration,
     play,
     pause,
     nextTrack,
     prevTrack,
     setVolume,
+    seek,
   };
 }

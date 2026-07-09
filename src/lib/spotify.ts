@@ -1,5 +1,5 @@
 export const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
-export const REDIRECT_URI = `${window.location.origin}/`;
+export const REDIRECT_URI = import.meta.env.VITE_SPOTIFY_REDIRECT_URI;
 export const SCOPES = [
   'streaming',
   'user-read-playback-state',
@@ -15,10 +15,11 @@ export const SPOTIFY_AUTH_URL = 'https://accounts.spotify.com/authorize';
 export const SPOTIFY_TOKEN_URL = 'https://accounts.spotify.com/api/token';
 export const SPOTIFY_API_URL = 'https://api.spotify.com/v1';
 
-export function generateCodeChallenge(codeVerifier: string): string {
+export async function generateCodeChallenge(codeVerifier: string): Promise<string> {
   const encoder = new TextEncoder();
   const data = encoder.encode(codeVerifier);
-  return btoa(String.fromCharCode.apply(null, Array.from(data)))
+  const digest = await crypto.subtle.digest('SHA-256', data);
+  return btoa(String.fromCharCode(...new Uint8Array(digest)))
     .replace(/\+/g, '-')
     .replace(/\//g, '_')
     .replace(/=/g, '');
@@ -27,7 +28,8 @@ export function generateCodeChallenge(codeVerifier: string): string {
 export function generateCodeVerifier(): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
   let verifier = '';
-  const randomValues = new Uint8Array(32);
+  // RFC 7636 requires the code_verifier to be 43-128 characters long.
+  const randomValues = new Uint8Array(64);
   crypto.getRandomValues(randomValues);
   for (let i = 0; i < randomValues.length; i++) {
     verifier += chars[randomValues[i] % chars.length];
@@ -58,6 +60,14 @@ export interface SpotifyPlaylist {
   tracks: { total: number };
 }
 
+export interface SpotifyDevice {
+  id: string;
+  name: string;
+  type: string;
+  is_active: boolean;
+  volume_percent: number | null;
+}
+
 export function getStoredTokens(): SpotifyTokens | null {
   const stored = localStorage.getItem('pomodoro:spotify:tokens');
   if (!stored) return null;
@@ -71,11 +81,20 @@ export function saveTokens(tokens: SpotifyTokens): void {
 export function clearTokens(): void {
   localStorage.removeItem('pomodoro:spotify:tokens');
   localStorage.removeItem('pomodoro:spotify:code_verifier');
+  sessionStorage.removeItem('pomodoro:spotify:code_verifier');
 }
 
 export async function exchangeCodeForToken(code: string): Promise<SpotifyTokens> {
-  const codeVerifier = localStorage.getItem('pomodoro:spotify:code_verifier');
-  if (!codeVerifier) throw new Error('Code verifier not found');
+  // Try sessionStorage first (survives redirects better), then localStorage
+  let codeVerifier = sessionStorage.getItem('pomodoro:spotify:code_verifier');
+  if (!codeVerifier) {
+    codeVerifier = localStorage.getItem('pomodoro:spotify:code_verifier');
+  }
+
+  if (!codeVerifier) {
+    console.error('Code verifier not found in storage');
+    throw new Error('Code verifier not found. Please try logging in again.');
+  }
 
   const body = new URLSearchParams({
     grant_type: 'authorization_code',
@@ -92,7 +111,10 @@ export async function exchangeCodeForToken(code: string): Promise<SpotifyTokens>
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to exchange code: ${response.statusText}`);
+    const body = await response.json().catch(() => null);
+    const reason = body?.error_description || body?.error || response.statusText;
+    console.error('Spotify token exchange failed:', body);
+    throw new Error(`Failed to exchange code: ${reason}`);
   }
 
   const data = await response.json();
@@ -130,11 +152,13 @@ export async function refreshAccessToken(refreshToken: string): Promise<SpotifyT
   };
 }
 
-export function getAuthorizationUrl(): string {
+export async function getAuthorizationUrl(): Promise<string> {
   const codeVerifier = generateCodeVerifier();
+  // Store in sessionStorage (survives redirect better) and localStorage as backup
+  sessionStorage.setItem('pomodoro:spotify:code_verifier', codeVerifier);
   localStorage.setItem('pomodoro:spotify:code_verifier', codeVerifier);
 
-  const codeChallenge = generateCodeChallenge(codeVerifier);
+  const codeChallenge = await generateCodeChallenge(codeVerifier);
 
   const params = new URLSearchParams({
     client_id: CLIENT_ID,

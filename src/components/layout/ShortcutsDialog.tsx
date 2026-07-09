@@ -18,7 +18,7 @@ export default function ShortcutsDialog({
 }) {
   return (
     <AppDialog open={open} title="Keyboard shortcuts" onClose={onClose}>
-      <ul className="flex flex-col gap-2.5">
+      <ul className="flex flex-col gap-3">
         {SHORTCUTS.map(([key, action]) => (
           <li
             key={key}

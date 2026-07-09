@@ -17,7 +17,7 @@ export default function CurrentTask({ task, status }: CurrentTaskProps) {
           {label}
         </span>
       )}
-      <h1 className="max-w-[28rem] truncate text-2xl font-normal text-fg">
+      <h1 className="max-w-md truncate text-3xl font-normal text-fg sm:text-4xl">
         {task.title || "Untitled task"}
       </h1>
       {task.description && (

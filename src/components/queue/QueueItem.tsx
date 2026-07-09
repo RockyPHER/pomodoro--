@@ -28,7 +28,7 @@ export default function QueueItem({ task, isCurrent, onSelect }: QueueItemProps)
           ? "opacity-0"
           : isCurrent
             ? "bg-accent-dim cursor-default"
-            : "cursor-pointer hover:bg-white/[0.07] active:bg-white/[0.10]",
+            : "cursor-pointer hover:bg-white/7 active:bg-white/10",
       )}
     >
       <span

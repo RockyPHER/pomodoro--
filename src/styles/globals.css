@@ -14,15 +14,15 @@
   :root,
   [data-theme="cozy-rain"] {
     /* Backgrounds */
-    --background: #08101c;
-    --background-2: #0c1625;
+    --background: #0b1118;
+    --background-2: #111923;
 
-    /* Glass surfaces */
-    --surface: rgba(18, 29, 45, 0.52);
-    --surface-elevated: rgba(23, 35, 53, 0.68);
-    --surface-hover: rgba(32, 45, 66, 0.72);
+    /* Glass surfaces — translucent, floating, no borders */
+    --surface: rgba(255, 255, 255, 0.04);
+    --surface-elevated: rgba(255, 255, 255, 0.06);
+    --surface-hover: rgba(255, 255, 255, 0.09);
 
-    /* Borders */
+    /* Borders — kept for focus rings / functional affordances only, not decorative separators */
     --border: rgba(255, 255, 255, 0.1);
     --border-strong: rgba(255, 255, 255, 0.17);
 
@@ -31,11 +31,11 @@
     --fg-soft: rgba(242, 244, 248, 0.68);
     --fg-muted: rgba(242, 244, 248, 0.42);
 
-    /* Accent */
-    --accent: #a99cf4;
-    --accent-soft: #8ebdf7;
-    --accent-dim: rgba(169, 156, 244, 0.16);
-    --accent-glow: rgba(169, 156, 244, 0.35);
+    /* Accent — Spotify green, the single accent color across the app */
+    --accent: #1db954;
+    --accent-soft: #1ed760;
+    --accent-dim: rgba(29, 185, 84, 0.16);
+    --accent-glow: rgba(29, 185, 84, 0.35);
 
     /* States */
     --pause: #e7c08a;
@@ -78,6 +78,10 @@
   --color-success: var(--success);
 
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+
+  /* Radius scale — floating-surface panels use --radius-lg (~22px) */
+  --radius-md: 0.875rem;
+  --radius-lg: 1.375rem;
 }
 
 @layer base {
@@ -152,13 +156,24 @@
 }
 
 @layer utilities {
-  /* Glass panel surface — used by side panels, topbar, drawers */
+  /* Glass panel surface — used by side panels, topbar, drawers.
+   * No border: floating surfaces are separated by spacing, not outlines. */
   .glass {
     background: var(--surface);
     backdrop-filter: blur(var(--blur-panel));
     -webkit-backdrop-filter: blur(var(--blur-panel));
-    border: 1px solid var(--border);
     box-shadow: var(--shadow-panel);
+  }
+}
+
+/* Compound width+height variant: only switch the Spotify modal to its
+ * 2-column row layout when there's actually enough vertical room for the
+ * left column's fixed-height content (artwork + controls + volume/device
+ * row) — otherwise it falls back to the stacked layout and scrolls instead
+ * of clipping. */
+@custom-variant tall-row {
+  @media (min-width: 768px) and (min-height: 760px) {
+    @slot;
   }
 }
 
