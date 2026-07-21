@@ -8,6 +8,7 @@ import SpotifyPlaylistPicker from './SpotifyPlaylistPicker';
 import { useSpotifyAuth } from '../../contexts/SpotifyAuthContext';
 import { useSpotifyPlayerContext } from '../../contexts/SpotifyPlayerContext';
 import { useSpotifyApi } from '../../hooks/useSpotifyApi';
+import { useI18n } from '../../i18n/context';
 
 interface SpotifyModalProps {
   isOpen: boolean;
@@ -17,6 +18,7 @@ interface SpotifyModalProps {
 const REPEAT_SEQUENCE: Array<'off' | 'context' | 'track'> = ['off', 'context', 'track'];
 
 export default function SpotifyModal({ isOpen, onClose }: SpotifyModalProps) {
+  const { t } = useI18n();
   const auth = useSpotifyAuth();
   const player = useSpotifyPlayerContext();
   const api = useSpotifyApi(auth.accessToken);
@@ -24,7 +26,7 @@ export default function SpotifyModal({ isOpen, onClose }: SpotifyModalProps) {
 
   const currentTrack = player.playerState?.current_track;
   const albumArt = currentTrack?.album?.images?.[0]?.url;
-  const trackName = currentTrack?.name || 'Nothing playing';
+  const trackName = currentTrack?.name || t('spotify.nothingPlaying');
   const artistName = currentTrack?.artists?.map((a) => a.name).join(', ') || '';
 
   const handleVolumeChange = (newVolume: number) => {
@@ -49,7 +51,7 @@ export default function SpotifyModal({ isOpen, onClose }: SpotifyModalProps) {
     <AppDialog
       open={isOpen}
       onClose={onClose}
-      title="Spotify"
+      title={t('spotify.title')}
       hideHeader
       disableGlass
       maxWidthClassName="max-w-5xl"
@@ -61,7 +63,7 @@ export default function SpotifyModal({ isOpen, onClose }: SpotifyModalProps) {
       >
         <button
           onClick={onClose}
-          aria-label="Close"
+          aria-label={t('dialog.close')}
           className="absolute right-5 top-5 z-20 flex h-8 w-8 items-center justify-center rounded-full text-fg-muted transition-colors hover:bg-white/8 hover:text-fg"
         >
           <X className="h-4 w-4" />

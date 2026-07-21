@@ -1,6 +1,7 @@
 import { Check, Pause, Play, RotateCcw } from "lucide-react";
 import { SessionStatus } from "../../lib/sessionStatus";
 import Button from "../layout/Button";
+import { useI18n } from "../../i18n/context";
 
 interface SessionControlsProps {
   status: SessionStatus;
@@ -25,17 +26,17 @@ export default function SessionControls({
   reset,
   loadTasks,
 }: SessionControlsProps) {
+  const { t } = useI18n();
+
   if (status === "idle") {
     return (
       <div className="flex flex-col items-center gap-2">
         <Button onClick={loadTasks} disabled={!canLoad} className="rounded-full px-7 py-3.5">
           <Play className="h-4 w-4" />
-          Start focus
+          {t("controls.startFocus")}
         </Button>
         {!canLoad && (
-          <p className="text-xs text-fg-muted">
-            Set a duration to include a task in the session.
-          </p>
+          <p className="text-xs text-fg-muted">{t("controls.setDuration")}</p>
         )}
       </div>
     );
@@ -47,24 +48,24 @@ export default function SessionControls({
     <div className="flex items-center justify-center gap-3">
       <Button variant="secondary" onClick={complete} className={sideButton}>
         <Check className="h-4 w-4" />
-        Complete
+        {t("controls.complete")}
       </Button>
 
       {isRunning ? (
         <Button onClick={pause} className="rounded-full px-7 py-3.5">
           <Pause className="h-4 w-4" />
-          Pause
+          {t("controls.pause")}
         </Button>
       ) : (
         <Button onClick={start} className="rounded-full px-7 py-3.5">
           <Play className="h-4 w-4" />
-          {status === "paused" ? "Resume" : "Start"}
+          {status === "paused" ? t("controls.resume") : t("controls.start")}
         </Button>
       )}
 
       <Button variant="secondary" onClick={reset} className={sideButton}>
         <RotateCcw className="h-4 w-4" />
-        Reset
+        {t("controls.reset")}
       </Button>
     </div>
   );

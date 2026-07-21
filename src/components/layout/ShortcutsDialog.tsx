@@ -1,13 +1,5 @@
 import AppDialog from "./AppDialog";
-
-const SHORTCUTS: [string, string][] = [
-  ["Space", "Start / Pause"],
-  ["Enter", "Complete current task"],
-  ["N", "Add task"],
-  ["T", "Toggle plan"],
-  ["Q", "Toggle queue"],
-  ["Esc", "Close panel or dialog"],
-];
+import { useI18n } from "../../i18n/context";
 
 export default function ShortcutsDialog({
   open,
@@ -16,8 +8,19 @@ export default function ShortcutsDialog({
   open: boolean;
   onClose: () => void;
 }) {
+  const { t } = useI18n();
+
+  const SHORTCUTS: [string, string][] = [
+    ["Space", t("shortcuts.startPause")],
+    ["Enter", t("shortcuts.completeTask")],
+    ["N", t("shortcuts.addTask")],
+    ["T", t("shortcuts.togglePlan")],
+    ["Q", t("shortcuts.toggleQueue")],
+    ["Esc", t("shortcuts.close")],
+  ];
+
   return (
-    <AppDialog open={open} title="Keyboard shortcuts" onClose={onClose}>
+    <AppDialog open={open} title={t("shortcuts.title")} onClose={onClose}>
       <ul className="flex flex-col gap-3">
         {SHORTCUTS.map(([key, action]) => (
           <li

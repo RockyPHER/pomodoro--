@@ -34,11 +34,3 @@ export function getSessionStatus({
   if (time < totalDuration) return "paused";
   return "ready";
 }
-
-export const STATUS_LABEL: Record<SessionStatus, string> = {
-  idle: "",
-  ready: "Ready",
-  running: "Focusing",
-  paused: "Paused",
-  completed: "Done",
-};

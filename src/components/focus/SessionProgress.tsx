@@ -1,5 +1,6 @@
 import { SessionStatus } from "../../lib/sessionStatus";
 import { cn } from "../../lib/cn";
+import { useI18n } from "../../i18n/context";
 
 interface SessionProgressProps {
   time: number;
@@ -13,13 +14,14 @@ export default function SessionProgress({
   totalDuration,
   status,
 }: SessionProgressProps) {
+  const { t } = useI18n();
   const elapsed = totalDuration > 0 ? totalDuration - time : 0;
   const fraction = totalDuration > 0 ? elapsed / totalDuration : 0;
 
   return (
     <div
       role="progressbar"
-      aria-label="Session progress"
+      aria-label={t("progress.aria")}
       aria-valuemin={0}
       aria-valuemax={totalDuration}
       aria-valuenow={Math.round(elapsed)}

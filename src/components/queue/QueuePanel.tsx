@@ -1,18 +1,16 @@
-import { ChevronRight } from "lucide-react";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { useDroppable } from "@dnd-kit/core";
 import { AnimatePresence, motion } from "motion/react";
 import { ITask } from "../../models/task";
 import { formatTotal } from "../../lib/formatDuration";
-import IconButton from "../layout/IconButton";
 import Button from "../layout/Button";
 import QueueItem from "./QueueItem";
+import { useI18n } from "../../i18n/context";
 
 interface QueuePanelProps {
   runTasks: ITask[];
   currentTask: ITask | undefined;
   clearTasks: () => void;
-  onCollapse: () => void;
   onSelectTask: (task: ITask) => void;
 }
 
@@ -20,24 +18,21 @@ export default function QueuePanel({
   runTasks,
   currentTask,
   clearTasks,
-  onCollapse,
   onSelectTask,
 }: QueuePanelProps) {
+  const { t, tc } = useI18n();
   const { setNodeRef } = useDroppable({ id: "run-container" });
 
   return (
-    <section className="glass flex flex-col overflow-hidden rounded-lg">
+    <section className="glass flex w-full flex-col overflow-hidden rounded-lg border border-border">
       <header className="flex shrink-0 items-center justify-between px-5 pt-4 pb-3">
         <div className="flex flex-col">
-          <h2 className="text-sm font-semibold text-fg">Up next</h2>
+          <h2 className="text-sm font-semibold text-fg">{t("queue.title")}</h2>
           <p className="text-xs text-fg-muted">
-            {runTasks.length} {runTasks.length === 1 ? "task" : "tasks"}
+            {tc("queue.count", runTasks.length)}
             {runTasks.length > 0 && ` · ${formatTotal(runTasks)}`}
           </p>
         </div>
-        <IconButton label="Collapse queue" onClick={onCollapse} className="h-8 w-8">
-          <ChevronRight className="h-4 w-4" />
-        </IconButton>
       </header>
 
       <div
@@ -95,7 +90,7 @@ export default function QueuePanel({
                 onClick={clearTasks}
                 className="mt-1 w-full shrink-0 rounded-md py-2 text-xs uppercase tracking-[0.14em]"
               >
-                Clear queue
+                {t("queue.clear")}
               </Button>
             </motion.div>
           ) : (
@@ -106,7 +101,7 @@ export default function QueuePanel({
               exit={{ opacity: 0, transition: { duration: 0.1 } }}
               className="px-1 py-3 text-center text-xs text-fg-muted"
             >
-              Drag tasks here, or start a session to fill the queue.
+              {t("queue.empty")}
             </motion.p>
           )}
         </AnimatePresence>

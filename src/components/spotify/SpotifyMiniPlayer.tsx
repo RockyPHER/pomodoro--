@@ -1,6 +1,7 @@
 import { Play, Pause, ChevronUp, Music } from 'lucide-react';
 import { useSpotifyAuth } from '../../contexts/SpotifyAuthContext';
 import { useSpotifyPlayerContext } from '../../contexts/SpotifyPlayerContext';
+import { useI18n } from '../../i18n/context';
 
 interface SpotifyMiniPlayerProps {
   isOpen: boolean;
@@ -8,6 +9,7 @@ interface SpotifyMiniPlayerProps {
 }
 
 export default function SpotifyMiniPlayer({ isOpen, onToggle }: SpotifyMiniPlayerProps) {
+  const { t } = useI18n();
   const auth = useSpotifyAuth();
   const player = useSpotifyPlayerContext();
 
@@ -17,8 +19,8 @@ export default function SpotifyMiniPlayer({ isOpen, onToggle }: SpotifyMiniPlaye
 
   const currentTrack = player.playerState?.current_track;
   const albumArt = currentTrack?.album?.images?.[0]?.url;
-  const trackName = currentTrack?.name || 'Not playing';
-  const artistName = currentTrack?.artists?.map((a) => a.name).join(', ') || 'Spotify';
+  const trackName = currentTrack?.name || t('spotify.notPlaying');
+  const artistName = currentTrack?.artists?.map((a) => a.name).join(', ') || t('spotify.title');
   const pct = player.duration ? Math.min((player.progress / player.duration) * 100, 100) : 0;
 
   return (
@@ -32,8 +34,8 @@ export default function SpotifyMiniPlayer({ isOpen, onToggle }: SpotifyMiniPlaye
           onToggle();
         }
       }}
-      aria-label="Open Spotify player"
-      className="glass w-full shrink-0 cursor-pointer overflow-hidden rounded-lg transition-all hover:bg-surface-hover"
+      aria-label={t('spotify.openPlayer')}
+      className="glass w-full shrink-0 cursor-pointer overflow-hidden rounded-lg border border-border transition-all hover:bg-surface-hover"
     >
       <div className="flex items-center gap-3 px-3 py-2.5">
         {/* Album art or placeholder */}
@@ -59,7 +61,7 @@ export default function SpotifyMiniPlayer({ isOpen, onToggle }: SpotifyMiniPlaye
           }}
           disabled={!player.isReady}
           className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent/20 text-accent transition-all hover:bg-accent/30 active:scale-90 disabled:opacity-50"
-          aria-label={player.isPlaying ? 'Pause' : 'Play'}
+          aria-label={player.isPlaying ? t('spotify.pause') : t('spotify.play')}
         >
           {player.isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4 ml-0.5" />}
         </button>

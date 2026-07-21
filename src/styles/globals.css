@@ -47,6 +47,99 @@
     --shadow-panel: 0 20px 60px rgba(0, 0, 0, 0.22);
     --blur-panel: 18px;
   }
+
+  [data-theme="warm-cafe"] {
+    /* Backgrounds — warm espresso brown instead of cozy-rain's blue-black */
+    --background: #1a120c;
+    --background-2: #21160e;
+
+    --surface: rgba(255, 244, 230, 0.05);
+    --surface-elevated: rgba(255, 244, 230, 0.08);
+    --surface-hover: rgba(255, 244, 230, 0.11);
+
+    --border: rgba(255, 226, 190, 0.12);
+    --border-strong: rgba(255, 226, 190, 0.2);
+
+    --fg: #f8efe3;
+    --fg-soft: rgba(248, 239, 227, 0.68);
+    --fg-muted: rgba(248, 239, 227, 0.44);
+
+    /* Accent — roasted caramel */
+    --accent: #e0954f;
+    --accent-soft: #f0ab68;
+    --accent-dim: rgba(224, 149, 79, 0.16);
+    --accent-glow: rgba(224, 149, 79, 0.35);
+
+    --pause: #e7c08a;
+    --pause-dim: rgba(231, 192, 138, 0.16);
+    --danger: #e48787;
+    --success: #b7c98f;
+
+    --shadow-panel: 0 20px 60px rgba(0, 0, 0, 0.28);
+    --blur-panel: 18px;
+  }
+
+  [data-theme="minimal-light"] {
+    /* Backgrounds — restrained graphite, no color cast */
+    --background: #101112;
+    --background-2: #17181a;
+
+    --surface: rgba(255, 255, 255, 0.045);
+    --surface-elevated: rgba(255, 255, 255, 0.07);
+    --surface-hover: rgba(255, 255, 255, 0.1);
+
+    --border: rgba(255, 255, 255, 0.09);
+    --border-strong: rgba(255, 255, 255, 0.16);
+
+    --fg: #f5f6f7;
+    --fg-soft: rgba(245, 246, 247, 0.66);
+    --fg-muted: rgba(245, 246, 247, 0.4);
+
+    /* Accent — quiet slate blue, minimal color footprint */
+    --accent: #8fa8c9;
+    --accent-soft: #a8bfdd;
+    --accent-dim: rgba(143, 168, 201, 0.16);
+    --accent-glow: rgba(143, 168, 201, 0.3);
+
+    --pause: #cbb88a;
+    --pause-dim: rgba(203, 184, 138, 0.16);
+    --danger: #d98a8a;
+    --success: #9bb89b;
+
+    --shadow-panel: 0 20px 60px rgba(0, 0, 0, 0.2);
+    --blur-panel: 18px;
+  }
+
+  [data-theme="performance-sport"] {
+    /* Backgrounds — near-black with a hot undertone */
+    --background: #120b0b;
+    --background-2: #1a1010;
+
+    --surface: rgba(255, 255, 255, 0.045);
+    --surface-elevated: rgba(255, 255, 255, 0.07);
+    --surface-hover: rgba(255, 255, 255, 0.1);
+
+    --border: rgba(255, 210, 200, 0.1);
+    --border-strong: rgba(255, 210, 200, 0.18);
+
+    --fg: #f7f2f0;
+    --fg-soft: rgba(247, 242, 240, 0.68);
+    --fg-muted: rgba(247, 242, 240, 0.42);
+
+    /* Accent — electric orange-red, high-energy */
+    --accent: #ff5a3c;
+    --accent-soft: #ff7a5c;
+    --accent-dim: rgba(255, 90, 60, 0.16);
+    --accent-glow: rgba(255, 90, 60, 0.4);
+
+    --pause: #e7c08a;
+    --pause-dim: rgba(231, 192, 138, 0.16);
+    --danger: #e45c5c;
+    --success: #8fcf9d;
+
+    --shadow-panel: 0 20px 60px rgba(0, 0, 0, 0.3);
+    --blur-panel: 18px;
+  }
 }
 
 /* Map semantic tokens into Tailwind's theme so utilities like

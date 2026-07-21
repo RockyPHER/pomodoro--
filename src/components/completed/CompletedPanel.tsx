@@ -3,6 +3,7 @@ import { Check, ChevronDown, Trash2 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { ITask } from "../../models/task";
 import { cn } from "../../lib/cn";
+import { useI18n } from "../../i18n/context";
 
 interface CompletedPanelProps {
   completedTasks: ITask[];
@@ -10,11 +11,12 @@ interface CompletedPanelProps {
 }
 
 export default function CompletedPanel({ completedTasks, onClear }: CompletedPanelProps) {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const count = completedTasks.length;
 
   return (
-    <section className="glass overflow-hidden rounded-lg">
+    <section className="glass w-full overflow-hidden rounded-lg border border-border">
       <div className="flex items-center justify-between px-5 py-4">
         <button
           onClick={() => count > 0 && setOpen((o) => !o)}
@@ -24,7 +26,7 @@ export default function CompletedPanel({ completedTasks, onClear }: CompletedPan
             count > 0 ? "cursor-pointer" : "cursor-default",
           )}
         >
-          <span className="text-sm font-semibold text-fg">Completed today</span>
+          <span className="text-sm font-semibold text-fg">{t("completed.title")}</span>
           <span className="flex items-center gap-2">
             <span className="text-sm tabular-nums text-fg-soft">{count}</span>
             {count > 0 && (
@@ -40,8 +42,8 @@ export default function CompletedPanel({ completedTasks, onClear }: CompletedPan
         {count > 0 && (
           <button
             onClick={onClear}
-            aria-label="Clear completed tasks"
-            title="Clear completed"
+            aria-label={t("completed.clearAria")}
+            title={t("completed.clear")}
             className="cursor-pointer ml-3 flex h-7 w-7 shrink-0 items-center justify-center rounded-md border border-transparent text-fg-muted transition-all duration-150 hover:border-danger/40 hover:bg-danger/[0.12] hover:text-danger active:scale-[0.88]"
           >
             <Trash2 className="h-3.5 w-3.5" />
@@ -51,9 +53,9 @@ export default function CompletedPanel({ completedTasks, onClear }: CompletedPan
 
       {count > 0 && !open && (
         <div className="flex flex-wrap gap-1.5 px-5 pb-4">
-          {completedTasks.map((t) => (
+          {completedTasks.map((task) => (
             <span
-              key={t.id}
+              key={task.id}
               className="h-1.5 w-1.5 rounded-full bg-success"
               aria-hidden="true"
             />
@@ -70,13 +72,13 @@ export default function CompletedPanel({ completedTasks, onClear }: CompletedPan
             transition={{ duration: 0.22, ease: "easeOut" }}
             className="overflow-hidden pt-1"
           >
-            {completedTasks.map((t) => (
+            {completedTasks.map((task) => (
               <li
-                key={t.id}
+                key={task.id}
                 className="flex items-center gap-2 px-5 py-2 text-sm text-fg-soft"
               >
                 <Check className="h-3.5 w-3.5 shrink-0 text-success" />
-                <span className="truncate">{t.title || "Untitled"}</span>
+                <span className="truncate">{task.title || t("completed.untitled")}</span>
               </li>
             ))}
           </motion.ul>

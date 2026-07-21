@@ -4,12 +4,14 @@ import { useEffect, useState } from 'react';
 import { LogOut } from 'lucide-react';
 import { motion } from 'motion/react';
 import SpotifyLogo from './SpotifyLogo';
+import { useI18n } from '../../i18n/context';
 
 interface SpotifyLoginProps {
   onClose?: () => void;
 }
 
 export default function SpotifyLogin({ onClose }: SpotifyLoginProps) {
+  const { t } = useI18n();
   const auth = useSpotifyAuth();
   const api = useSpotifyApi(auth.accessToken);
   const [user, setUser] = useState<{ display_name: string; images?: Array<{ url: string }> } | null>(null);
@@ -25,8 +27,8 @@ export default function SpotifyLogin({ onClose }: SpotifyLoginProps) {
       <div className="flex flex-col items-center gap-4 rounded-2xl bg-white/4 px-6 py-8 text-center">
         <SpotifyLogo className="h-8 w-8" />
         <div>
-          <h3 className="text-base font-semibold text-fg">Connect Spotify</h3>
-          <p className="mt-1 text-xs text-fg-muted">Play music while you focus</p>
+          <h3 className="text-base font-semibold text-fg">{t('spotify.connect')}</h3>
+          <p className="mt-1 text-xs text-fg-muted">{t('spotify.tagline')}</p>
         </div>
         <motion.button
           onClick={auth.login}
@@ -35,8 +37,11 @@ export default function SpotifyLogin({ onClose }: SpotifyLoginProps) {
           transition={{ type: 'spring', stiffness: 400, damping: 22 }}
           className="rounded-full bg-[#1DB954] px-5 py-2.5 text-sm font-medium text-[#04150a] shadow-[0_8px_20px_rgba(29,185,84,0.3)]"
         >
-          Login with Spotify
+          {t('spotify.login')}
         </motion.button>
+        {auth.error === 'popup-blocked' && (
+          <p className="max-w-xs text-xs text-danger">{t('spotify.loginPopupBlocked')}</p>
+        )}
       </div>
     );
   }
@@ -52,9 +57,9 @@ export default function SpotifyLogin({ onClose }: SpotifyLoginProps) {
           </div>
         )}
         <div className="min-w-0">
-          <p className="truncate text-sm font-medium text-fg">{user?.display_name || 'Spotify User'}</p>
+          <p className="truncate text-sm font-medium text-fg">{user?.display_name || t('spotify.user')}</p>
           <span className="mt-0.5 inline-flex items-center rounded-full bg-[#1DB954]/15 px-2 py-0.5 text-[0.65rem] font-medium tracking-wide text-[#1DB954]">
-            Premium
+            {t('spotify.premium')}
           </span>
         </div>
       </div>
@@ -67,7 +72,7 @@ export default function SpotifyLogin({ onClose }: SpotifyLoginProps) {
         whileTap={{ scale: 0.92 }}
         transition={{ type: 'spring', stiffness: 400, damping: 20 }}
         className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-fg-muted transition-colors hover:bg-danger/10 hover:text-danger"
-        aria-label="Logout"
+        aria-label={t('spotify.logout')}
       >
         <LogOut className="h-4 w-4" />
       </motion.button>

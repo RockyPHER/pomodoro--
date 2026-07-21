@@ -3,6 +3,7 @@ import { formatTime } from "../../scripts/timeFormat";
 import { SessionStatus } from "../../lib/sessionStatus";
 import { playTimerEndSound } from "../../lib/sounds";
 import SessionProgress from "./SessionProgress";
+import { useI18n } from "../../i18n/context";
 
 interface SessionTimerProps {
   time: number;
@@ -31,6 +32,7 @@ export default function SessionTimer({
   setIsReset,
   onTaskConclude,
 }: SessionTimerProps) {
+  const { t } = useI18n();
   const [mm, ss] = formatTime(time);
   const [announcement, setAnnouncement] = useState("");
 
@@ -63,16 +65,19 @@ export default function SessionTimer({
   const announced = useRef<string | null>(null);
   useEffect(() => {
     let msg = "";
-    if (status === "running" && time === 60) msg = "One minute remaining";
-    else if (status === "running") msg = `Focusing on ${currentTitle ?? "task"}`;
-    else if (status === "paused") msg = "Paused";
-    else if (status === "completed") msg = "Task complete";
+    if (status === "running" && time === 60) msg = t("announce.oneMinute");
+    else if (status === "running")
+      msg = t("announce.focusing", { title: currentTitle || t("focus.untitledTask") });
+    else if (status === "paused") msg = t("announce.paused");
+    else if (status === "completed") msg = t("announce.complete");
 
     const key = `${status}:${msg}`;
     if (msg && announced.current !== key) {
       announced.current = key;
       setAnnouncement(msg);
     }
+    // `t` is stable per locale; re-running on locale change isn't needed for a transient live-region message.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, time, currentTitle]);
 
   return (

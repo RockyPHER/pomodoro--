@@ -3,6 +3,7 @@ import { useSpotifyApi } from '../../hooks/useSpotifyApi';
 import { SpotifyPlaylist } from '../../lib/spotify';
 import { Music, Play } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useI18n } from '../../i18n/context';
 
 interface SpotifyPlaylistPickerProps {
   accessToken: string | null;
@@ -17,6 +18,7 @@ export default function SpotifyPlaylistPicker({
   activeContextUri,
   onPlaylistSelected,
 }: SpotifyPlaylistPickerProps) {
+  const { t, tc } = useI18n();
   const api = useSpotifyApi(accessToken);
   const [playlists, setPlaylists] = useState<SpotifyPlaylist[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +34,7 @@ export default function SpotifyPlaylistPicker({
         const data = await api.getUserPlaylists(30);
         setPlaylists(data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load playlists');
+        setError(err instanceof Error ? err.message : t('spotify.loadPlaylistsFailed'));
       } finally {
         setIsLoading(false);
       }
@@ -48,14 +50,14 @@ export default function SpotifyPlaylistPicker({
       await api.playPlaylist(playlist.uri, deviceId);
       onPlaylistSelected?.();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to play playlist');
+      setError(err instanceof Error ? err.message : t('spotify.playPlaylistFailed'));
     }
   };
 
   return (
     <div className="flex min-h-0 flex-col gap-3">
       <div className="flex items-center justify-between px-1">
-        <h3 className="text-sm font-semibold text-fg">Your Playlists</h3>
+        <h3 className="text-sm font-semibold text-fg">{t('spotify.yourPlaylists')}</h3>
         {!isLoading && playlists.length > 0 && (
           <span className="text-xs text-fg-muted">{playlists.length}</span>
         )}
@@ -76,7 +78,7 @@ export default function SpotifyPlaylistPicker({
       {!isLoading && playlists.length === 0 && (
         <div className="rounded-2xl bg-white/4 p-6 text-center">
           <Music className="mx-auto h-6 w-6 text-fg-muted" />
-          <p className="mt-2 text-xs text-fg-muted">No playlists found</p>
+          <p className="mt-2 text-xs text-fg-muted">{t('spotify.noPlaylists')}</p>
         </div>
       )}
 
@@ -125,7 +127,7 @@ export default function SpotifyPlaylistPicker({
                   {playlist.name}
                 </p>
                 <p className="truncate text-xs text-fg-muted">
-                  {playlist.tracks.total} {playlist.tracks.total === 1 ? 'song' : 'songs'} · {playlist.owner.display_name}
+                  {tc('spotify.songs', playlist.tracks.total)} · {playlist.owner.display_name}
                 </p>
               </div>
             </motion.button>

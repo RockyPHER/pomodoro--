@@ -1,8 +1,10 @@
 import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import IconButton from "./IconButton";
 import { cn } from "../../lib/cn";
+import { useI18n } from "../../i18n/context";
 
 interface AppDialogProps {
   open: boolean;
@@ -36,6 +38,7 @@ export default function AppDialog({
   panelClassName,
   disableGlass = false,
 }: AppDialogProps) {
+  const { t } = useI18n();
   const panelRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<Element | null>(null);
 
@@ -76,7 +79,12 @@ export default function AppDialog({
     };
   }, [open, onClose]);
 
-  return (
+  // Portaled to <body>: a `position: fixed` descendant is contained by the
+  // nearest ancestor with a transform/filter/backdrop-filter, not the
+  // viewport. Callers routinely mount dialogs inside `.glass` surfaces
+  // (backdrop-filter), which would otherwise trap this at that ancestor's
+  // box instead of centering on screen.
+  return createPortal(
     <AnimatePresence>
       {open && (
         <motion.div
@@ -113,7 +121,7 @@ export default function AppDialog({
                   {titleIcon}
                   {title}
                 </h2>
-                <IconButton label="Close" onClick={onClose} className="h-8 w-8">
+                <IconButton label={t("dialog.close")} onClick={onClose} className="h-8 w-8">
                   <X className="h-4 w-4" />
                 </IconButton>
               </div>
@@ -122,6 +130,7 @@ export default function AppDialog({
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }

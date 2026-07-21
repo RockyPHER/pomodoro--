@@ -2,6 +2,7 @@ import { Play, Pause, SkipBack, SkipForward, Volume2, Shuffle, Repeat, Repeat1 }
 import { motion } from 'motion/react';
 import SpotifySlider from './SpotifySlider';
 import SpotifyDeviceButton from './SpotifyDeviceButton';
+import { useI18n } from '../../i18n/context';
 
 type RepeatMode = 'off' | 'context' | 'track';
 
@@ -56,6 +57,7 @@ export default function SpotifyControls({
   deviceId,
   onDeviceSelected,
 }: SpotifyControlsProps) {
+  const { t } = useI18n();
   const RepeatIcon = repeatMode === 'track' ? Repeat1 : Repeat;
   const repeatActive = repeatMode !== 'off';
 
@@ -67,7 +69,7 @@ export default function SpotifyControls({
           value={Math.min(progress, duration || 0)}
           max={duration || 1}
           onChange={isReady ? onSeek : undefined}
-          ariaLabel="Seek"
+          ariaLabel={t('spotify.seek')}
         />
         <div className="flex justify-between text-[0.7rem] tabular-nums text-fg-muted">
           <span>{formatMs(progress)}</span>
@@ -84,7 +86,7 @@ export default function SpotifyControls({
           transition={springy}
           className="flex h-9 w-9 items-center justify-center rounded-full transition-colors"
           style={{ color: shuffle ? '#1DB954' : 'var(--fg-muted)' }}
-          aria-label="Toggle shuffle"
+          aria-label={t('spotify.toggleShuffle')}
           aria-pressed={shuffle}
         >
           <Shuffle className="h-4 w-4" />
@@ -97,7 +99,7 @@ export default function SpotifyControls({
           whileTap={{ scale: 0.9 }}
           transition={springy}
           className="flex h-11 w-11 items-center justify-center rounded-full bg-white/4 text-fg transition-colors hover:bg-white/8 disabled:opacity-40"
-          aria-label="Previous track"
+          aria-label={t('spotify.previous')}
         >
           <SkipBack className="h-4 w-4" />
         </motion.button>
@@ -109,7 +111,7 @@ export default function SpotifyControls({
           whileTap={{ scale: 0.93 }}
           transition={springy}
           className="flex h-14 w-14 items-center justify-center rounded-full bg-[#1DB954] text-[#04150a] shadow-[0_8px_24px_rgba(29,185,84,0.35)] disabled:opacity-50"
-          aria-label={isPlaying ? 'Pause' : 'Play'}
+          aria-label={isPlaying ? t('spotify.pause') : t('spotify.play')}
         >
           {isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6 ml-0.5" />}
         </motion.button>
@@ -121,7 +123,7 @@ export default function SpotifyControls({
           whileTap={{ scale: 0.9 }}
           transition={springy}
           className="flex h-11 w-11 items-center justify-center rounded-full bg-white/4 text-fg transition-colors hover:bg-white/8 disabled:opacity-40"
-          aria-label="Next track"
+          aria-label={t('spotify.next')}
         >
           <SkipForward className="h-4 w-4" />
         </motion.button>
@@ -133,7 +135,7 @@ export default function SpotifyControls({
           transition={springy}
           className="flex h-9 w-9 items-center justify-center rounded-full transition-colors"
           style={{ color: repeatActive ? '#1DB954' : 'var(--fg-muted)' }}
-          aria-label="Toggle repeat"
+          aria-label={t('spotify.toggleRepeat')}
           aria-pressed={repeatActive}
         >
           <RepeatIcon className="h-4 w-4" />

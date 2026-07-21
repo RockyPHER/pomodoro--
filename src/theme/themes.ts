@@ -22,9 +22,9 @@ export interface ThemeMeta {
 
 export const THEMES: ThemeMeta[] = [
   { id: "cozy-rain", label: "Cozy Rain", available: true },
-  { id: "warm-cafe", label: "Warm Café", available: false },
-  { id: "minimal-light", label: "Minimal Light", available: false },
-  { id: "performance-sport", label: "Performance", available: false },
+  { id: "warm-cafe", label: "Warm Café", available: true },
+  { id: "minimal-light", label: "Minimal Light", available: true },
+  { id: "performance-sport", label: "Performance", available: true },
 ];
 
 export const DEFAULT_THEME: AppTheme = "cozy-rain";

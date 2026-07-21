@@ -3,6 +3,7 @@ import { Laptop2, Smartphone, Speaker, Monitor } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useSpotifyApi } from '../../hooks/useSpotifyApi';
 import { SpotifyDevice } from '../../lib/spotify';
+import { useI18n } from '../../i18n/context';
 
 interface SpotifyDeviceButtonProps {
   accessToken: string | null;
@@ -23,6 +24,7 @@ export default function SpotifyDeviceButton({
   activeDeviceId,
   onDeviceSelected,
 }: SpotifyDeviceButtonProps) {
+  const { t } = useI18n();
   const api = useSpotifyApi(accessToken);
   const [open, setOpen] = useState(false);
   const [devices, setDevices] = useState<SpotifyDevice[]>([]);
@@ -73,8 +75,8 @@ export default function SpotifyDeviceButton({
         whileTap={{ scale: 0.94 }}
         transition={{ type: 'spring', stiffness: 400, damping: 20 }}
         className="flex h-9 w-9 items-center justify-center rounded-full text-fg-muted transition-colors hover:bg-white/6 hover:text-fg"
-        aria-label="Choose playback device"
-        title="Devices"
+        aria-label={t('spotify.chooseDevice')}
+        title={t('spotify.devices')}
       >
         <Laptop2 className="h-4 w-4" />
       </motion.button>
@@ -89,11 +91,11 @@ export default function SpotifyDeviceButton({
             className="absolute bottom-full left-1/2 z-20 mb-2 w-56 -translate-x-1/2 overflow-hidden rounded-xl bg-[#141c28] p-1.5 shadow-2xl"
           >
             <p className="px-2.5 py-1.5 text-[0.65rem] font-medium uppercase tracking-wider text-fg-muted">
-              Devices
+              {t('spotify.devices')}
             </p>
-            {isLoading && <div className="px-2.5 py-2 text-xs text-fg-muted">Loading…</div>}
+            {isLoading && <div className="px-2.5 py-2 text-xs text-fg-muted">{t('spotify.loadingDevices')}</div>}
             {!isLoading && devices.length === 0 && (
-              <div className="px-2.5 py-2 text-xs text-fg-muted">No devices found</div>
+              <div className="px-2.5 py-2 text-xs text-fg-muted">{t('spotify.noDevices')}</div>
             )}
             {!isLoading &&
               devices.map((device) => {

@@ -3,6 +3,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { ITask } from "../../models/task";
 import { formatTime } from "../../scripts/timeFormat";
 import { cn } from "../../lib/cn";
+import { useI18n } from "../../i18n/context";
 
 interface QueueItemProps {
   task: ITask;
@@ -11,6 +12,7 @@ interface QueueItemProps {
 }
 
 export default function QueueItem({ task, isCurrent, onSelect }: QueueItemProps) {
+  const { t } = useI18n();
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: task.id });
   const [mm, ss] = formatTime(task.duration);
@@ -44,7 +46,7 @@ export default function QueueItem({ task, isCurrent, onSelect }: QueueItemProps)
           isCurrent ? "text-fg" : "text-fg-soft",
         )}
       >
-        {task.title || "Untitled"}
+        {task.title || t("queue.untitled")}
       </span>
       <span className="shrink-0 tabular-nums text-fg-muted">
         {mm}:{ss}

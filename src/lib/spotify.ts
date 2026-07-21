@@ -68,18 +68,20 @@ export interface SpotifyDevice {
   volume_percent: number | null;
 }
 
+export const SPOTIFY_TOKENS_KEY = 'pomodoro:spotify:tokens';
+
 export function getStoredTokens(): SpotifyTokens | null {
-  const stored = localStorage.getItem('pomodoro:spotify:tokens');
+  const stored = localStorage.getItem(SPOTIFY_TOKENS_KEY);
   if (!stored) return null;
   return JSON.parse(stored);
 }
 
 export function saveTokens(tokens: SpotifyTokens): void {
-  localStorage.setItem('pomodoro:spotify:tokens', JSON.stringify(tokens));
+  localStorage.setItem(SPOTIFY_TOKENS_KEY, JSON.stringify(tokens));
 }
 
 export function clearTokens(): void {
-  localStorage.removeItem('pomodoro:spotify:tokens');
+  localStorage.removeItem(SPOTIFY_TOKENS_KEY);
   localStorage.removeItem('pomodoro:spotify:code_verifier');
   sessionStorage.removeItem('pomodoro:spotify:code_verifier');
 }
